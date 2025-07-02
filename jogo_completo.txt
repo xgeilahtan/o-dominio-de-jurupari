@@ -1,0 +1,10 @@
+// Definições do mundo
+room cabana_velha "Uma cabana de madeira podre."
+room clareira_das_pegadas "Uma clareira onde o chão de terra mostra pegadas que apontam para trás."
+
+item amuleto_de_palha "Um amuleto trançado." in cabana_velha
+
+// Definição de um comando
+command usar amuleto_de_palha: 
+    when amuleto_de_palha in items 
+    do print "Ao segurar o amuleto, as pegadas no chão brilham!"
