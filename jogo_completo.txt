@@ -2,7 +2,7 @@
 // ARQUIVO DE DEFINIÇÃO DO MUNDO - VERSÃO COMPLETA
 // ===============================================
 
-// --- ITENS ---
+// --- ITENS ----
 ITEM amuleto_de_palha "Amuleto de Palha" { DESC "Um amuleto simples, trançado com palha seca. Parece quente ao toque." }
 ITEM cachimbo_de_barro "Cachimbo de Barro" { DESC "Um cachimbo de barro pequeno e liso, surpreendentemente leve. Ainda está um pouco quente." }
 ITEM incenso "Incenso de Ervas" { DESC "Um bastão de incenso de ervas aromáticas. A fumaça que ele soltaria parece ter propriedades calmantes e protetoras." }
