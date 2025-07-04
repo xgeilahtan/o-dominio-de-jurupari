@@ -1,498 +1,1482 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    NOT
-    OR
-
 Grammar
 
-Rule 0     S' -> game_spec
-Rule 1     game_spec -> statement_list
-Rule 2     statement_list -> statement
-Rule 3     statement_list -> statement_list statement
-Rule 4     statement -> room_def
-Rule 5     statement -> connect_def
-Rule 6     statement -> item_def
-Rule 7     statement -> command_def
-Rule 8     room_def -> ROOM ID STRING
-Rule 9     connect_def -> CONNECT ID DIRECTION ID
-Rule 10    item_def -> ITEM ID STRING IN ID
-Rule 11    command_def -> COMMAND ID ID COLON WHEN condition DO action_list
-Rule 12    condition -> ID IN ITEMS
-Rule 13    condition -> ROOM IS STRING
-Rule 14    action_list -> action
-Rule 15    action_list -> action_list AND action
-Rule 16    action -> PRINT STRING
-Rule 17    action -> GET ID
-Rule 18    action -> RELEASE ID
+Rule 0     S' -> program
+Rule 1     program -> definition_list
+Rule 2     definition_list -> definition_list definition
+Rule 3     definition_list -> empty
+Rule 4     definition -> item_def
+Rule 5     definition -> eco_def
+Rule 6     definition -> room_def
+Rule 7     definition -> interaction_def
+Rule 8     item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE
+Rule 9     eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE
+Rule 10    room_def -> ROOM ID STRING LBRACE statement_list RBRACE
+Rule 11    interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE
+Rule 12    statement_list -> statement_list statement
+Rule 13    statement_list -> empty
+Rule 14    statement -> DESC STRING
+Rule 15    statement -> SAIDA ID ID
+Rule 16    statement -> OBJETO ID STRING
+Rule 17    statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE
+Rule 18    statement -> ESTADO ID EQUALS ID
+Rule 19    statement -> QUANDO LBRACE statement_list RBRACE
+Rule 20    statement -> FAZER LBRACE statement_list RBRACE
+Rule 21    statement -> SALA_ATUAL_EH ID
+Rule 22    statement -> TEM_ITEM ID
+Rule 23    statement -> ESTADO_SALA_EH ID EQUALS ID
+Rule 24    statement -> PRINT STRING
+Rule 25    statement -> GANHAR_ITEM ID
+Rule 26    statement -> PERDER_ITEM ID
+Rule 27    statement -> GANHAR_ECO ID
+Rule 28    statement -> REMOVER_OBJETO ID
+Rule 29    statement -> DEFINIR_ESTADO ID EQUALS ID
+Rule 30    statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE
+Rule 31    statement -> FIMDEJOGO STRING
+Rule 32    statement -> TELEPORTAR ID
+Rule 33    empty -> <empty>
 
 Terminals, with rules where they appear
 
-AND                  : 15
-COLON                : 11
-COMMAND              : 11
-CONNECT              : 9
-DIRECTION            : 9
-DO                   : 11
-GET                  : 17
-ID                   : 8 9 9 10 10 11 11 12 17 18
-IN                   : 10 12
-IS                   : 13
-ITEM                 : 10
-ITEMS                : 12
-NOT                  : 
-OR                   : 
-PRINT                : 16
-RELEASE              : 18
-ROOM                 : 8 13
-STRING               : 8 10 13 16
-WHEN                 : 11
+DEFINIR_ESTADO       : 29
+DEFINIR_SAIDAS       : 30
+DESC                 : 8 9 14
+ECO                  : 9
+EQUALS               : 18 23 29
+ESTADO               : 18
+ESTADO_SALA_EH       : 23
+FAZER                : 20
+FIMDEJOGO            : 31
+GANHAR_ECO           : 27
+GANHAR_ITEM          : 25
+ID                   : 8 9 10 11 11 15 15 16 17 17 18 18 21 22 23 23 25 26 27 28 29 29 32
+INTERACAO            : 11
+ITEM                 : 8
+LBRACE               : 8 9 10 11 17 19 20 30
+OBJETO               : 16 17
+PERDER_ITEM          : 26
+PRINT                : 24
+QUANDO               : 19
+RBRACE               : 8 9 10 11 17 19 20 30
+REMOVER_OBJETO       : 28
+REVELA               : 17
+ROOM                 : 10
+SAIDA                : 15
+SALA_ATUAL_EH        : 21
+STRING               : 8 8 9 9 10 14 16 17 24 31
+TELEPORTAR           : 32
+TEM_ITEM             : 22
 error                : 
 
 Nonterminals, with rules where they appear
 
-action               : 14 15
-action_list          : 11 15
-command_def          : 7
-condition            : 11
-connect_def          : 5
-game_spec            : 0
-item_def             : 6
-room_def             : 4
-statement            : 2 3
-statement_list       : 1 3
+definition           : 2
+definition_list      : 1 2
+eco_def              : 5
+empty                : 3 13
+interaction_def      : 7
+item_def             : 4
+program              : 0
+room_def             : 6
+statement            : 12
+statement_list       : 10 11 12 19 20 30
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . game_spec
-    (1) game_spec -> . statement_list
-    (2) statement_list -> . statement
-    (3) statement_list -> . statement_list statement
-    (4) statement -> . room_def
-    (5) statement -> . connect_def
-    (6) statement -> . item_def
-    (7) statement -> . command_def
-    (8) room_def -> . ROOM ID STRING
-    (9) connect_def -> . CONNECT ID DIRECTION ID
-    (10) item_def -> . ITEM ID STRING IN ID
-    (11) command_def -> . COMMAND ID ID COLON WHEN condition DO action_list
+    (0) S' -> . program
+    (1) program -> . definition_list
+    (2) definition_list -> . definition_list definition
+    (3) definition_list -> . empty
+    (33) empty -> .
 
-    ROOM            shift and go to state 8
-    CONNECT         shift and go to state 9
-    ITEM            shift and go to state 10
-    COMMAND         shift and go to state 11
+    ITEM            reduce using rule 33 (empty -> .)
+    ECO             reduce using rule 33 (empty -> .)
+    ROOM            reduce using rule 33 (empty -> .)
+    INTERACAO       reduce using rule 33 (empty -> .)
+    $end            reduce using rule 33 (empty -> .)
 
-    game_spec                      shift and go to state 1
-    statement_list                 shift and go to state 2
-    statement                      shift and go to state 3
-    room_def                       shift and go to state 4
-    connect_def                    shift and go to state 5
-    item_def                       shift and go to state 6
-    command_def                    shift and go to state 7
+    program                        shift and go to state 1
+    definition_list                shift and go to state 2
+    empty                          shift and go to state 3
 
 state 1
 
-    (0) S' -> game_spec .
+    (0) S' -> program .
 
 
 
 state 2
 
-    (1) game_spec -> statement_list .
-    (3) statement_list -> statement_list . statement
-    (4) statement -> . room_def
-    (5) statement -> . connect_def
-    (6) statement -> . item_def
-    (7) statement -> . command_def
-    (8) room_def -> . ROOM ID STRING
-    (9) connect_def -> . CONNECT ID DIRECTION ID
-    (10) item_def -> . ITEM ID STRING IN ID
-    (11) command_def -> . COMMAND ID ID COLON WHEN condition DO action_list
+    (1) program -> definition_list .
+    (2) definition_list -> definition_list . definition
+    (4) definition -> . item_def
+    (5) definition -> . eco_def
+    (6) definition -> . room_def
+    (7) definition -> . interaction_def
+    (8) item_def -> . ITEM ID STRING LBRACE DESC STRING RBRACE
+    (9) eco_def -> . ECO ID STRING LBRACE DESC STRING RBRACE
+    (10) room_def -> . ROOM ID STRING LBRACE statement_list RBRACE
+    (11) interaction_def -> . INTERACAO ID ID LBRACE statement_list RBRACE
 
-    $end            reduce using rule 1 (game_spec -> statement_list .)
-    ROOM            shift and go to state 8
-    CONNECT         shift and go to state 9
-    ITEM            shift and go to state 10
-    COMMAND         shift and go to state 11
+    $end            reduce using rule 1 (program -> definition_list .)
+    ITEM            shift and go to state 9
+    ECO             shift and go to state 10
+    ROOM            shift and go to state 11
+    INTERACAO       shift and go to state 12
 
-    statement                      shift and go to state 12
-    room_def                       shift and go to state 4
-    connect_def                    shift and go to state 5
-    item_def                       shift and go to state 6
-    command_def                    shift and go to state 7
+    definition                     shift and go to state 4
+    item_def                       shift and go to state 5
+    eco_def                        shift and go to state 6
+    room_def                       shift and go to state 7
+    interaction_def                shift and go to state 8
 
 state 3
 
-    (2) statement_list -> statement .
+    (3) definition_list -> empty .
 
-    ROOM            reduce using rule 2 (statement_list -> statement .)
-    CONNECT         reduce using rule 2 (statement_list -> statement .)
-    ITEM            reduce using rule 2 (statement_list -> statement .)
-    COMMAND         reduce using rule 2 (statement_list -> statement .)
-    $end            reduce using rule 2 (statement_list -> statement .)
+    ITEM            reduce using rule 3 (definition_list -> empty .)
+    ECO             reduce using rule 3 (definition_list -> empty .)
+    ROOM            reduce using rule 3 (definition_list -> empty .)
+    INTERACAO       reduce using rule 3 (definition_list -> empty .)
+    $end            reduce using rule 3 (definition_list -> empty .)
 
 
 state 4
 
-    (4) statement -> room_def .
+    (2) definition_list -> definition_list definition .
 
-    ROOM            reduce using rule 4 (statement -> room_def .)
-    CONNECT         reduce using rule 4 (statement -> room_def .)
-    ITEM            reduce using rule 4 (statement -> room_def .)
-    COMMAND         reduce using rule 4 (statement -> room_def .)
-    $end            reduce using rule 4 (statement -> room_def .)
+    ITEM            reduce using rule 2 (definition_list -> definition_list definition .)
+    ECO             reduce using rule 2 (definition_list -> definition_list definition .)
+    ROOM            reduce using rule 2 (definition_list -> definition_list definition .)
+    INTERACAO       reduce using rule 2 (definition_list -> definition_list definition .)
+    $end            reduce using rule 2 (definition_list -> definition_list definition .)
 
 
 state 5
 
-    (5) statement -> connect_def .
+    (4) definition -> item_def .
 
-    ROOM            reduce using rule 5 (statement -> connect_def .)
-    CONNECT         reduce using rule 5 (statement -> connect_def .)
-    ITEM            reduce using rule 5 (statement -> connect_def .)
-    COMMAND         reduce using rule 5 (statement -> connect_def .)
-    $end            reduce using rule 5 (statement -> connect_def .)
+    ITEM            reduce using rule 4 (definition -> item_def .)
+    ECO             reduce using rule 4 (definition -> item_def .)
+    ROOM            reduce using rule 4 (definition -> item_def .)
+    INTERACAO       reduce using rule 4 (definition -> item_def .)
+    $end            reduce using rule 4 (definition -> item_def .)
 
 
 state 6
 
-    (6) statement -> item_def .
+    (5) definition -> eco_def .
 
-    ROOM            reduce using rule 6 (statement -> item_def .)
-    CONNECT         reduce using rule 6 (statement -> item_def .)
-    ITEM            reduce using rule 6 (statement -> item_def .)
-    COMMAND         reduce using rule 6 (statement -> item_def .)
-    $end            reduce using rule 6 (statement -> item_def .)
+    ITEM            reduce using rule 5 (definition -> eco_def .)
+    ECO             reduce using rule 5 (definition -> eco_def .)
+    ROOM            reduce using rule 5 (definition -> eco_def .)
+    INTERACAO       reduce using rule 5 (definition -> eco_def .)
+    $end            reduce using rule 5 (definition -> eco_def .)
 
 
 state 7
 
-    (7) statement -> command_def .
+    (6) definition -> room_def .
 
-    ROOM            reduce using rule 7 (statement -> command_def .)
-    CONNECT         reduce using rule 7 (statement -> command_def .)
-    ITEM            reduce using rule 7 (statement -> command_def .)
-    COMMAND         reduce using rule 7 (statement -> command_def .)
-    $end            reduce using rule 7 (statement -> command_def .)
+    ITEM            reduce using rule 6 (definition -> room_def .)
+    ECO             reduce using rule 6 (definition -> room_def .)
+    ROOM            reduce using rule 6 (definition -> room_def .)
+    INTERACAO       reduce using rule 6 (definition -> room_def .)
+    $end            reduce using rule 6 (definition -> room_def .)
 
 
 state 8
 
-    (8) room_def -> ROOM . ID STRING
+    (7) definition -> interaction_def .
 
-    ID              shift and go to state 13
+    ITEM            reduce using rule 7 (definition -> interaction_def .)
+    ECO             reduce using rule 7 (definition -> interaction_def .)
+    ROOM            reduce using rule 7 (definition -> interaction_def .)
+    INTERACAO       reduce using rule 7 (definition -> interaction_def .)
+    $end            reduce using rule 7 (definition -> interaction_def .)
 
 
 state 9
 
-    (9) connect_def -> CONNECT . ID DIRECTION ID
+    (8) item_def -> ITEM . ID STRING LBRACE DESC STRING RBRACE
 
-    ID              shift and go to state 14
+    ID              shift and go to state 13
 
 
 state 10
 
-    (10) item_def -> ITEM . ID STRING IN ID
+    (9) eco_def -> ECO . ID STRING LBRACE DESC STRING RBRACE
 
-    ID              shift and go to state 15
+    ID              shift and go to state 14
 
 
 state 11
 
-    (11) command_def -> COMMAND . ID ID COLON WHEN condition DO action_list
+    (10) room_def -> ROOM . ID STRING LBRACE statement_list RBRACE
 
-    ID              shift and go to state 16
+    ID              shift and go to state 15
 
 
 state 12
 
-    (3) statement_list -> statement_list statement .
+    (11) interaction_def -> INTERACAO . ID ID LBRACE statement_list RBRACE
 
-    ROOM            reduce using rule 3 (statement_list -> statement_list statement .)
-    CONNECT         reduce using rule 3 (statement_list -> statement_list statement .)
-    ITEM            reduce using rule 3 (statement_list -> statement_list statement .)
-    COMMAND         reduce using rule 3 (statement_list -> statement_list statement .)
-    $end            reduce using rule 3 (statement_list -> statement_list statement .)
+    ID              shift and go to state 16
 
 
 state 13
 
-    (8) room_def -> ROOM ID . STRING
+    (8) item_def -> ITEM ID . STRING LBRACE DESC STRING RBRACE
 
     STRING          shift and go to state 17
 
 
 state 14
 
-    (9) connect_def -> CONNECT ID . DIRECTION ID
+    (9) eco_def -> ECO ID . STRING LBRACE DESC STRING RBRACE
 
-    DIRECTION       shift and go to state 18
+    STRING          shift and go to state 18
 
 
 state 15
 
-    (10) item_def -> ITEM ID . STRING IN ID
+    (10) room_def -> ROOM ID . STRING LBRACE statement_list RBRACE
 
     STRING          shift and go to state 19
 
 
 state 16
 
-    (11) command_def -> COMMAND ID . ID COLON WHEN condition DO action_list
+    (11) interaction_def -> INTERACAO ID . ID LBRACE statement_list RBRACE
 
     ID              shift and go to state 20
 
 
 state 17
 
-    (8) room_def -> ROOM ID STRING .
+    (8) item_def -> ITEM ID STRING . LBRACE DESC STRING RBRACE
 
-    ROOM            reduce using rule 8 (room_def -> ROOM ID STRING .)
-    CONNECT         reduce using rule 8 (room_def -> ROOM ID STRING .)
-    ITEM            reduce using rule 8 (room_def -> ROOM ID STRING .)
-    COMMAND         reduce using rule 8 (room_def -> ROOM ID STRING .)
-    $end            reduce using rule 8 (room_def -> ROOM ID STRING .)
+    LBRACE          shift and go to state 21
 
 
 state 18
 
-    (9) connect_def -> CONNECT ID DIRECTION . ID
+    (9) eco_def -> ECO ID STRING . LBRACE DESC STRING RBRACE
 
-    ID              shift and go to state 21
+    LBRACE          shift and go to state 22
 
 
 state 19
 
-    (10) item_def -> ITEM ID STRING . IN ID
+    (10) room_def -> ROOM ID STRING . LBRACE statement_list RBRACE
 
-    IN              shift and go to state 22
+    LBRACE          shift and go to state 23
 
 
 state 20
 
-    (11) command_def -> COMMAND ID ID . COLON WHEN condition DO action_list
+    (11) interaction_def -> INTERACAO ID ID . LBRACE statement_list RBRACE
 
-    COLON           shift and go to state 23
+    LBRACE          shift and go to state 24
 
 
 state 21
 
-    (9) connect_def -> CONNECT ID DIRECTION ID .
+    (8) item_def -> ITEM ID STRING LBRACE . DESC STRING RBRACE
 
-    ROOM            reduce using rule 9 (connect_def -> CONNECT ID DIRECTION ID .)
-    CONNECT         reduce using rule 9 (connect_def -> CONNECT ID DIRECTION ID .)
-    ITEM            reduce using rule 9 (connect_def -> CONNECT ID DIRECTION ID .)
-    COMMAND         reduce using rule 9 (connect_def -> CONNECT ID DIRECTION ID .)
-    $end            reduce using rule 9 (connect_def -> CONNECT ID DIRECTION ID .)
+    DESC            shift and go to state 25
 
 
 state 22
 
-    (10) item_def -> ITEM ID STRING IN . ID
+    (9) eco_def -> ECO ID STRING LBRACE . DESC STRING RBRACE
 
-    ID              shift and go to state 24
+    DESC            shift and go to state 26
 
 
 state 23
 
-    (11) command_def -> COMMAND ID ID COLON . WHEN condition DO action_list
+    (10) room_def -> ROOM ID STRING LBRACE . statement_list RBRACE
+    (12) statement_list -> . statement_list statement
+    (13) statement_list -> . empty
+    (33) empty -> .
 
-    WHEN            shift and go to state 25
+    RBRACE          reduce using rule 33 (empty -> .)
+    DESC            reduce using rule 33 (empty -> .)
+    SAIDA           reduce using rule 33 (empty -> .)
+    OBJETO          reduce using rule 33 (empty -> .)
+    ESTADO          reduce using rule 33 (empty -> .)
+    QUANDO          reduce using rule 33 (empty -> .)
+    FAZER           reduce using rule 33 (empty -> .)
+    SALA_ATUAL_EH   reduce using rule 33 (empty -> .)
+    TEM_ITEM        reduce using rule 33 (empty -> .)
+    ESTADO_SALA_EH  reduce using rule 33 (empty -> .)
+    PRINT           reduce using rule 33 (empty -> .)
+    GANHAR_ITEM     reduce using rule 33 (empty -> .)
+    PERDER_ITEM     reduce using rule 33 (empty -> .)
+    GANHAR_ECO      reduce using rule 33 (empty -> .)
+    REMOVER_OBJETO  reduce using rule 33 (empty -> .)
+    DEFINIR_ESTADO  reduce using rule 33 (empty -> .)
+    DEFINIR_SAIDAS  reduce using rule 33 (empty -> .)
+    FIMDEJOGO       reduce using rule 33 (empty -> .)
+    TELEPORTAR      reduce using rule 33 (empty -> .)
 
+    statement_list                 shift and go to state 27
+    empty                          shift and go to state 28
 
 state 24
 
-    (10) item_def -> ITEM ID STRING IN ID .
+    (11) interaction_def -> INTERACAO ID ID LBRACE . statement_list RBRACE
+    (12) statement_list -> . statement_list statement
+    (13) statement_list -> . empty
+    (33) empty -> .
 
-    ROOM            reduce using rule 10 (item_def -> ITEM ID STRING IN ID .)
-    CONNECT         reduce using rule 10 (item_def -> ITEM ID STRING IN ID .)
-    ITEM            reduce using rule 10 (item_def -> ITEM ID STRING IN ID .)
-    COMMAND         reduce using rule 10 (item_def -> ITEM ID STRING IN ID .)
-    $end            reduce using rule 10 (item_def -> ITEM ID STRING IN ID .)
+    RBRACE          reduce using rule 33 (empty -> .)
+    DESC            reduce using rule 33 (empty -> .)
+    SAIDA           reduce using rule 33 (empty -> .)
+    OBJETO          reduce using rule 33 (empty -> .)
+    ESTADO          reduce using rule 33 (empty -> .)
+    QUANDO          reduce using rule 33 (empty -> .)
+    FAZER           reduce using rule 33 (empty -> .)
+    SALA_ATUAL_EH   reduce using rule 33 (empty -> .)
+    TEM_ITEM        reduce using rule 33 (empty -> .)
+    ESTADO_SALA_EH  reduce using rule 33 (empty -> .)
+    PRINT           reduce using rule 33 (empty -> .)
+    GANHAR_ITEM     reduce using rule 33 (empty -> .)
+    PERDER_ITEM     reduce using rule 33 (empty -> .)
+    GANHAR_ECO      reduce using rule 33 (empty -> .)
+    REMOVER_OBJETO  reduce using rule 33 (empty -> .)
+    DEFINIR_ESTADO  reduce using rule 33 (empty -> .)
+    DEFINIR_SAIDAS  reduce using rule 33 (empty -> .)
+    FIMDEJOGO       reduce using rule 33 (empty -> .)
+    TELEPORTAR      reduce using rule 33 (empty -> .)
 
+    statement_list                 shift and go to state 29
+    empty                          shift and go to state 28
 
 state 25
 
-    (11) command_def -> COMMAND ID ID COLON WHEN . condition DO action_list
-    (12) condition -> . ID IN ITEMS
-    (13) condition -> . ROOM IS STRING
+    (8) item_def -> ITEM ID STRING LBRACE DESC . STRING RBRACE
 
-    ID              shift and go to state 26
-    ROOM            shift and go to state 28
+    STRING          shift and go to state 30
 
-    condition                      shift and go to state 27
 
 state 26
 
-    (12) condition -> ID . IN ITEMS
+    (9) eco_def -> ECO ID STRING LBRACE DESC . STRING RBRACE
 
-    IN              shift and go to state 29
+    STRING          shift and go to state 31
 
 
 state 27
 
-    (11) command_def -> COMMAND ID ID COLON WHEN condition . DO action_list
+    (10) room_def -> ROOM ID STRING LBRACE statement_list . RBRACE
+    (12) statement_list -> statement_list . statement
+    (14) statement -> . DESC STRING
+    (15) statement -> . SAIDA ID ID
+    (16) statement -> . OBJETO ID STRING
+    (17) statement -> . OBJETO ID STRING LBRACE REVELA ID RBRACE
+    (18) statement -> . ESTADO ID EQUALS ID
+    (19) statement -> . QUANDO LBRACE statement_list RBRACE
+    (20) statement -> . FAZER LBRACE statement_list RBRACE
+    (21) statement -> . SALA_ATUAL_EH ID
+    (22) statement -> . TEM_ITEM ID
+    (23) statement -> . ESTADO_SALA_EH ID EQUALS ID
+    (24) statement -> . PRINT STRING
+    (25) statement -> . GANHAR_ITEM ID
+    (26) statement -> . PERDER_ITEM ID
+    (27) statement -> . GANHAR_ECO ID
+    (28) statement -> . REMOVER_OBJETO ID
+    (29) statement -> . DEFINIR_ESTADO ID EQUALS ID
+    (30) statement -> . DEFINIR_SAIDAS LBRACE statement_list RBRACE
+    (31) statement -> . FIMDEJOGO STRING
+    (32) statement -> . TELEPORTAR ID
 
-    DO              shift and go to state 30
+    RBRACE          shift and go to state 32
+    DESC            shift and go to state 34
+    SAIDA           shift and go to state 35
+    OBJETO          shift and go to state 36
+    ESTADO          shift and go to state 37
+    QUANDO          shift and go to state 38
+    FAZER           shift and go to state 39
+    SALA_ATUAL_EH   shift and go to state 40
+    TEM_ITEM        shift and go to state 41
+    ESTADO_SALA_EH  shift and go to state 42
+    PRINT           shift and go to state 43
+    GANHAR_ITEM     shift and go to state 44
+    PERDER_ITEM     shift and go to state 45
+    GANHAR_ECO      shift and go to state 46
+    REMOVER_OBJETO  shift and go to state 47
+    DEFINIR_ESTADO  shift and go to state 48
+    DEFINIR_SAIDAS  shift and go to state 49
+    FIMDEJOGO       shift and go to state 50
+    TELEPORTAR      shift and go to state 51
 
+    statement                      shift and go to state 33
 
 state 28
 
-    (13) condition -> ROOM . IS STRING
+    (13) statement_list -> empty .
 
-    IS              shift and go to state 31
+    RBRACE          reduce using rule 13 (statement_list -> empty .)
+    DESC            reduce using rule 13 (statement_list -> empty .)
+    SAIDA           reduce using rule 13 (statement_list -> empty .)
+    OBJETO          reduce using rule 13 (statement_list -> empty .)
+    ESTADO          reduce using rule 13 (statement_list -> empty .)
+    QUANDO          reduce using rule 13 (statement_list -> empty .)
+    FAZER           reduce using rule 13 (statement_list -> empty .)
+    SALA_ATUAL_EH   reduce using rule 13 (statement_list -> empty .)
+    TEM_ITEM        reduce using rule 13 (statement_list -> empty .)
+    ESTADO_SALA_EH  reduce using rule 13 (statement_list -> empty .)
+    PRINT           reduce using rule 13 (statement_list -> empty .)
+    GANHAR_ITEM     reduce using rule 13 (statement_list -> empty .)
+    PERDER_ITEM     reduce using rule 13 (statement_list -> empty .)
+    GANHAR_ECO      reduce using rule 13 (statement_list -> empty .)
+    REMOVER_OBJETO  reduce using rule 13 (statement_list -> empty .)
+    DEFINIR_ESTADO  reduce using rule 13 (statement_list -> empty .)
+    DEFINIR_SAIDAS  reduce using rule 13 (statement_list -> empty .)
+    FIMDEJOGO       reduce using rule 13 (statement_list -> empty .)
+    TELEPORTAR      reduce using rule 13 (statement_list -> empty .)
 
 
 state 29
 
-    (12) condition -> ID IN . ITEMS
+    (11) interaction_def -> INTERACAO ID ID LBRACE statement_list . RBRACE
+    (12) statement_list -> statement_list . statement
+    (14) statement -> . DESC STRING
+    (15) statement -> . SAIDA ID ID
+    (16) statement -> . OBJETO ID STRING
+    (17) statement -> . OBJETO ID STRING LBRACE REVELA ID RBRACE
+    (18) statement -> . ESTADO ID EQUALS ID
+    (19) statement -> . QUANDO LBRACE statement_list RBRACE
+    (20) statement -> . FAZER LBRACE statement_list RBRACE
+    (21) statement -> . SALA_ATUAL_EH ID
+    (22) statement -> . TEM_ITEM ID
+    (23) statement -> . ESTADO_SALA_EH ID EQUALS ID
+    (24) statement -> . PRINT STRING
+    (25) statement -> . GANHAR_ITEM ID
+    (26) statement -> . PERDER_ITEM ID
+    (27) statement -> . GANHAR_ECO ID
+    (28) statement -> . REMOVER_OBJETO ID
+    (29) statement -> . DEFINIR_ESTADO ID EQUALS ID
+    (30) statement -> . DEFINIR_SAIDAS LBRACE statement_list RBRACE
+    (31) statement -> . FIMDEJOGO STRING
+    (32) statement -> . TELEPORTAR ID
 
-    ITEMS           shift and go to state 32
+    RBRACE          shift and go to state 52
+    DESC            shift and go to state 34
+    SAIDA           shift and go to state 35
+    OBJETO          shift and go to state 36
+    ESTADO          shift and go to state 37
+    QUANDO          shift and go to state 38
+    FAZER           shift and go to state 39
+    SALA_ATUAL_EH   shift and go to state 40
+    TEM_ITEM        shift and go to state 41
+    ESTADO_SALA_EH  shift and go to state 42
+    PRINT           shift and go to state 43
+    GANHAR_ITEM     shift and go to state 44
+    PERDER_ITEM     shift and go to state 45
+    GANHAR_ECO      shift and go to state 46
+    REMOVER_OBJETO  shift and go to state 47
+    DEFINIR_ESTADO  shift and go to state 48
+    DEFINIR_SAIDAS  shift and go to state 49
+    FIMDEJOGO       shift and go to state 50
+    TELEPORTAR      shift and go to state 51
 
+    statement                      shift and go to state 33
 
 state 30
 
-    (11) command_def -> COMMAND ID ID COLON WHEN condition DO . action_list
-    (14) action_list -> . action
-    (15) action_list -> . action_list AND action
-    (16) action -> . PRINT STRING
-    (17) action -> . GET ID
-    (18) action -> . RELEASE ID
+    (8) item_def -> ITEM ID STRING LBRACE DESC STRING . RBRACE
 
-    PRINT           shift and go to state 35
-    GET             shift and go to state 36
-    RELEASE         shift and go to state 37
+    RBRACE          shift and go to state 53
 
-    action_list                    shift and go to state 33
-    action                         shift and go to state 34
 
 state 31
 
-    (13) condition -> ROOM IS . STRING
+    (9) eco_def -> ECO ID STRING LBRACE DESC STRING . RBRACE
 
-    STRING          shift and go to state 38
+    RBRACE          shift and go to state 54
 
 
 state 32
 
-    (12) condition -> ID IN ITEMS .
+    (10) room_def -> ROOM ID STRING LBRACE statement_list RBRACE .
 
-    DO              reduce using rule 12 (condition -> ID IN ITEMS .)
+    ITEM            reduce using rule 10 (room_def -> ROOM ID STRING LBRACE statement_list RBRACE .)
+    ECO             reduce using rule 10 (room_def -> ROOM ID STRING LBRACE statement_list RBRACE .)
+    ROOM            reduce using rule 10 (room_def -> ROOM ID STRING LBRACE statement_list RBRACE .)
+    INTERACAO       reduce using rule 10 (room_def -> ROOM ID STRING LBRACE statement_list RBRACE .)
+    $end            reduce using rule 10 (room_def -> ROOM ID STRING LBRACE statement_list RBRACE .)
 
 
 state 33
 
-    (11) command_def -> COMMAND ID ID COLON WHEN condition DO action_list .
-    (15) action_list -> action_list . AND action
+    (12) statement_list -> statement_list statement .
 
-    ROOM            reduce using rule 11 (command_def -> COMMAND ID ID COLON WHEN condition DO action_list .)
-    CONNECT         reduce using rule 11 (command_def -> COMMAND ID ID COLON WHEN condition DO action_list .)
-    ITEM            reduce using rule 11 (command_def -> COMMAND ID ID COLON WHEN condition DO action_list .)
-    COMMAND         reduce using rule 11 (command_def -> COMMAND ID ID COLON WHEN condition DO action_list .)
-    $end            reduce using rule 11 (command_def -> COMMAND ID ID COLON WHEN condition DO action_list .)
-    AND             shift and go to state 39
+    RBRACE          reduce using rule 12 (statement_list -> statement_list statement .)
+    DESC            reduce using rule 12 (statement_list -> statement_list statement .)
+    SAIDA           reduce using rule 12 (statement_list -> statement_list statement .)
+    OBJETO          reduce using rule 12 (statement_list -> statement_list statement .)
+    ESTADO          reduce using rule 12 (statement_list -> statement_list statement .)
+    QUANDO          reduce using rule 12 (statement_list -> statement_list statement .)
+    FAZER           reduce using rule 12 (statement_list -> statement_list statement .)
+    SALA_ATUAL_EH   reduce using rule 12 (statement_list -> statement_list statement .)
+    TEM_ITEM        reduce using rule 12 (statement_list -> statement_list statement .)
+    ESTADO_SALA_EH  reduce using rule 12 (statement_list -> statement_list statement .)
+    PRINT           reduce using rule 12 (statement_list -> statement_list statement .)
+    GANHAR_ITEM     reduce using rule 12 (statement_list -> statement_list statement .)
+    PERDER_ITEM     reduce using rule 12 (statement_list -> statement_list statement .)
+    GANHAR_ECO      reduce using rule 12 (statement_list -> statement_list statement .)
+    REMOVER_OBJETO  reduce using rule 12 (statement_list -> statement_list statement .)
+    DEFINIR_ESTADO  reduce using rule 12 (statement_list -> statement_list statement .)
+    DEFINIR_SAIDAS  reduce using rule 12 (statement_list -> statement_list statement .)
+    FIMDEJOGO       reduce using rule 12 (statement_list -> statement_list statement .)
+    TELEPORTAR      reduce using rule 12 (statement_list -> statement_list statement .)
 
 
 state 34
 
-    (14) action_list -> action .
+    (14) statement -> DESC . STRING
 
-    AND             reduce using rule 14 (action_list -> action .)
-    ROOM            reduce using rule 14 (action_list -> action .)
-    CONNECT         reduce using rule 14 (action_list -> action .)
-    ITEM            reduce using rule 14 (action_list -> action .)
-    COMMAND         reduce using rule 14 (action_list -> action .)
-    $end            reduce using rule 14 (action_list -> action .)
+    STRING          shift and go to state 55
 
 
 state 35
 
-    (16) action -> PRINT . STRING
+    (15) statement -> SAIDA . ID ID
 
-    STRING          shift and go to state 40
+    ID              shift and go to state 56
 
 
 state 36
 
-    (17) action -> GET . ID
+    (16) statement -> OBJETO . ID STRING
+    (17) statement -> OBJETO . ID STRING LBRACE REVELA ID RBRACE
 
-    ID              shift and go to state 41
+    ID              shift and go to state 57
 
 
 state 37
 
-    (18) action -> RELEASE . ID
+    (18) statement -> ESTADO . ID EQUALS ID
 
-    ID              shift and go to state 42
+    ID              shift and go to state 58
 
 
 state 38
 
-    (13) condition -> ROOM IS STRING .
+    (19) statement -> QUANDO . LBRACE statement_list RBRACE
 
-    DO              reduce using rule 13 (condition -> ROOM IS STRING .)
+    LBRACE          shift and go to state 59
 
 
 state 39
 
-    (15) action_list -> action_list AND . action
-    (16) action -> . PRINT STRING
-    (17) action -> . GET ID
-    (18) action -> . RELEASE ID
+    (20) statement -> FAZER . LBRACE statement_list RBRACE
 
-    PRINT           shift and go to state 35
-    GET             shift and go to state 36
-    RELEASE         shift and go to state 37
+    LBRACE          shift and go to state 60
 
-    action                         shift and go to state 43
 
 state 40
 
-    (16) action -> PRINT STRING .
+    (21) statement -> SALA_ATUAL_EH . ID
 
-    AND             reduce using rule 16 (action -> PRINT STRING .)
-    ROOM            reduce using rule 16 (action -> PRINT STRING .)
-    CONNECT         reduce using rule 16 (action -> PRINT STRING .)
-    ITEM            reduce using rule 16 (action -> PRINT STRING .)
-    COMMAND         reduce using rule 16 (action -> PRINT STRING .)
-    $end            reduce using rule 16 (action -> PRINT STRING .)
+    ID              shift and go to state 61
 
 
 state 41
 
-    (17) action -> GET ID .
+    (22) statement -> TEM_ITEM . ID
 
-    AND             reduce using rule 17 (action -> GET ID .)
-    ROOM            reduce using rule 17 (action -> GET ID .)
-    CONNECT         reduce using rule 17 (action -> GET ID .)
-    ITEM            reduce using rule 17 (action -> GET ID .)
-    COMMAND         reduce using rule 17 (action -> GET ID .)
-    $end            reduce using rule 17 (action -> GET ID .)
+    ID              shift and go to state 62
 
 
 state 42
 
-    (18) action -> RELEASE ID .
+    (23) statement -> ESTADO_SALA_EH . ID EQUALS ID
 
-    AND             reduce using rule 18 (action -> RELEASE ID .)
-    ROOM            reduce using rule 18 (action -> RELEASE ID .)
-    CONNECT         reduce using rule 18 (action -> RELEASE ID .)
-    ITEM            reduce using rule 18 (action -> RELEASE ID .)
-    COMMAND         reduce using rule 18 (action -> RELEASE ID .)
-    $end            reduce using rule 18 (action -> RELEASE ID .)
+    ID              shift and go to state 63
 
 
 state 43
 
-    (15) action_list -> action_list AND action .
+    (24) statement -> PRINT . STRING
 
-    AND             reduce using rule 15 (action_list -> action_list AND action .)
-    ROOM            reduce using rule 15 (action_list -> action_list AND action .)
-    CONNECT         reduce using rule 15 (action_list -> action_list AND action .)
-    ITEM            reduce using rule 15 (action_list -> action_list AND action .)
-    COMMAND         reduce using rule 15 (action_list -> action_list AND action .)
-    $end            reduce using rule 15 (action_list -> action_list AND action .)
+    STRING          shift and go to state 64
+
+
+state 44
+
+    (25) statement -> GANHAR_ITEM . ID
+
+    ID              shift and go to state 65
+
+
+state 45
+
+    (26) statement -> PERDER_ITEM . ID
+
+    ID              shift and go to state 66
+
+
+state 46
+
+    (27) statement -> GANHAR_ECO . ID
+
+    ID              shift and go to state 67
+
+
+state 47
+
+    (28) statement -> REMOVER_OBJETO . ID
+
+    ID              shift and go to state 68
+
+
+state 48
+
+    (29) statement -> DEFINIR_ESTADO . ID EQUALS ID
+
+    ID              shift and go to state 69
+
+
+state 49
+
+    (30) statement -> DEFINIR_SAIDAS . LBRACE statement_list RBRACE
+
+    LBRACE          shift and go to state 70
+
+
+state 50
+
+    (31) statement -> FIMDEJOGO . STRING
+
+    STRING          shift and go to state 71
+
+
+state 51
+
+    (32) statement -> TELEPORTAR . ID
+
+    ID              shift and go to state 72
+
+
+state 52
+
+    (11) interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .
+
+    ITEM            reduce using rule 11 (interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .)
+    ECO             reduce using rule 11 (interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .)
+    ROOM            reduce using rule 11 (interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .)
+    INTERACAO       reduce using rule 11 (interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .)
+    $end            reduce using rule 11 (interaction_def -> INTERACAO ID ID LBRACE statement_list RBRACE .)
+
+
+state 53
+
+    (8) item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .
+
+    ITEM            reduce using rule 8 (item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .)
+    ECO             reduce using rule 8 (item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .)
+    ROOM            reduce using rule 8 (item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .)
+    INTERACAO       reduce using rule 8 (item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .)
+    $end            reduce using rule 8 (item_def -> ITEM ID STRING LBRACE DESC STRING RBRACE .)
+
+
+state 54
+
+    (9) eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .
+
+    ITEM            reduce using rule 9 (eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .)
+    ECO             reduce using rule 9 (eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .)
+    ROOM            reduce using rule 9 (eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .)
+    INTERACAO       reduce using rule 9 (eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .)
+    $end            reduce using rule 9 (eco_def -> ECO ID STRING LBRACE DESC STRING RBRACE .)
+
+
+state 55
+
+    (14) statement -> DESC STRING .
+
+    RBRACE          reduce using rule 14 (statement -> DESC STRING .)
+    DESC            reduce using rule 14 (statement -> DESC STRING .)
+    SAIDA           reduce using rule 14 (statement -> DESC STRING .)
+    OBJETO          reduce using rule 14 (statement -> DESC STRING .)
+    ESTADO          reduce using rule 14 (statement -> DESC STRING .)
+    QUANDO          reduce using rule 14 (statement -> DESC STRING .)
+    FAZER           reduce using rule 14 (statement -> DESC STRING .)
+    SALA_ATUAL_EH   reduce using rule 14 (statement -> DESC STRING .)
+    TEM_ITEM        reduce using rule 14 (statement -> DESC STRING .)
+    ESTADO_SALA_EH  reduce using rule 14 (statement -> DESC STRING .)
+    PRINT           reduce using rule 14 (statement -> DESC STRING .)
+    GANHAR_ITEM     reduce using rule 14 (statement -> DESC STRING .)
+    PERDER_ITEM     reduce using rule 14 (statement -> DESC STRING .)
+    GANHAR_ECO      reduce using rule 14 (statement -> DESC STRING .)
+    REMOVER_OBJETO  reduce using rule 14 (statement -> DESC STRING .)
+    DEFINIR_ESTADO  reduce using rule 14 (statement -> DESC STRING .)
+    DEFINIR_SAIDAS  reduce using rule 14 (statement -> DESC STRING .)
+    FIMDEJOGO       reduce using rule 14 (statement -> DESC STRING .)
+    TELEPORTAR      reduce using rule 14 (statement -> DESC STRING .)
+
+
+state 56
+
+    (15) statement -> SAIDA ID . ID
+
+    ID              shift and go to state 73
+
+
+state 57
+
+    (16) statement -> OBJETO ID . STRING
+    (17) statement -> OBJETO ID . STRING LBRACE REVELA ID RBRACE
+
+    STRING          shift and go to state 74
+
+
+state 58
+
+    (18) statement -> ESTADO ID . EQUALS ID
+
+    EQUALS          shift and go to state 75
+
+
+state 59
+
+    (19) statement -> QUANDO LBRACE . statement_list RBRACE
+    (12) statement_list -> . statement_list statement
+    (13) statement_list -> . empty
+    (33) empty -> .
+
+    RBRACE          reduce using rule 33 (empty -> .)
+    DESC            reduce using rule 33 (empty -> .)
+    SAIDA           reduce using rule 33 (empty -> .)
+    OBJETO          reduce using rule 33 (empty -> .)
+    ESTADO          reduce using rule 33 (empty -> .)
+    QUANDO          reduce using rule 33 (empty -> .)
+    FAZER           reduce using rule 33 (empty -> .)
+    SALA_ATUAL_EH   reduce using rule 33 (empty -> .)
+    TEM_ITEM        reduce using rule 33 (empty -> .)
+    ESTADO_SALA_EH  reduce using rule 33 (empty -> .)
+    PRINT           reduce using rule 33 (empty -> .)
+    GANHAR_ITEM     reduce using rule 33 (empty -> .)
+    PERDER_ITEM     reduce using rule 33 (empty -> .)
+    GANHAR_ECO      reduce using rule 33 (empty -> .)
+    REMOVER_OBJETO  reduce using rule 33 (empty -> .)
+    DEFINIR_ESTADO  reduce using rule 33 (empty -> .)
+    DEFINIR_SAIDAS  reduce using rule 33 (empty -> .)
+    FIMDEJOGO       reduce using rule 33 (empty -> .)
+    TELEPORTAR      reduce using rule 33 (empty -> .)
+
+    statement_list                 shift and go to state 76
+    empty                          shift and go to state 28
+
+state 60
+
+    (20) statement -> FAZER LBRACE . statement_list RBRACE
+    (12) statement_list -> . statement_list statement
+    (13) statement_list -> . empty
+    (33) empty -> .
+
+    RBRACE          reduce using rule 33 (empty -> .)
+    DESC            reduce using rule 33 (empty -> .)
+    SAIDA           reduce using rule 33 (empty -> .)
+    OBJETO          reduce using rule 33 (empty -> .)
+    ESTADO          reduce using rule 33 (empty -> .)
+    QUANDO          reduce using rule 33 (empty -> .)
+    FAZER           reduce using rule 33 (empty -> .)
+    SALA_ATUAL_EH   reduce using rule 33 (empty -> .)
+    TEM_ITEM        reduce using rule 33 (empty -> .)
+    ESTADO_SALA_EH  reduce using rule 33 (empty -> .)
+    PRINT           reduce using rule 33 (empty -> .)
+    GANHAR_ITEM     reduce using rule 33 (empty -> .)
+    PERDER_ITEM     reduce using rule 33 (empty -> .)
+    GANHAR_ECO      reduce using rule 33 (empty -> .)
+    REMOVER_OBJETO  reduce using rule 33 (empty -> .)
+    DEFINIR_ESTADO  reduce using rule 33 (empty -> .)
+    DEFINIR_SAIDAS  reduce using rule 33 (empty -> .)
+    FIMDEJOGO       reduce using rule 33 (empty -> .)
+    TELEPORTAR      reduce using rule 33 (empty -> .)
+
+    statement_list                 shift and go to state 77
+    empty                          shift and go to state 28
+
+state 61
+
+    (21) statement -> SALA_ATUAL_EH ID .
+
+    RBRACE          reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    DESC            reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    SAIDA           reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    OBJETO          reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    ESTADO          reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    QUANDO          reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    FAZER           reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    SALA_ATUAL_EH   reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    TEM_ITEM        reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    ESTADO_SALA_EH  reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    PRINT           reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    GANHAR_ITEM     reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    PERDER_ITEM     reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    GANHAR_ECO      reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    REMOVER_OBJETO  reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    DEFINIR_ESTADO  reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    DEFINIR_SAIDAS  reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    FIMDEJOGO       reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+    TELEPORTAR      reduce using rule 21 (statement -> SALA_ATUAL_EH ID .)
+
+
+state 62
+
+    (22) statement -> TEM_ITEM ID .
+
+    RBRACE          reduce using rule 22 (statement -> TEM_ITEM ID .)
+    DESC            reduce using rule 22 (statement -> TEM_ITEM ID .)
+    SAIDA           reduce using rule 22 (statement -> TEM_ITEM ID .)
+    OBJETO          reduce using rule 22 (statement -> TEM_ITEM ID .)
+    ESTADO          reduce using rule 22 (statement -> TEM_ITEM ID .)
+    QUANDO          reduce using rule 22 (statement -> TEM_ITEM ID .)
+    FAZER           reduce using rule 22 (statement -> TEM_ITEM ID .)
+    SALA_ATUAL_EH   reduce using rule 22 (statement -> TEM_ITEM ID .)
+    TEM_ITEM        reduce using rule 22 (statement -> TEM_ITEM ID .)
+    ESTADO_SALA_EH  reduce using rule 22 (statement -> TEM_ITEM ID .)
+    PRINT           reduce using rule 22 (statement -> TEM_ITEM ID .)
+    GANHAR_ITEM     reduce using rule 22 (statement -> TEM_ITEM ID .)
+    PERDER_ITEM     reduce using rule 22 (statement -> TEM_ITEM ID .)
+    GANHAR_ECO      reduce using rule 22 (statement -> TEM_ITEM ID .)
+    REMOVER_OBJETO  reduce using rule 22 (statement -> TEM_ITEM ID .)
+    DEFINIR_ESTADO  reduce using rule 22 (statement -> TEM_ITEM ID .)
+    DEFINIR_SAIDAS  reduce using rule 22 (statement -> TEM_ITEM ID .)
+    FIMDEJOGO       reduce using rule 22 (statement -> TEM_ITEM ID .)
+    TELEPORTAR      reduce using rule 22 (statement -> TEM_ITEM ID .)
+
+
+state 63
+
+    (23) statement -> ESTADO_SALA_EH ID . EQUALS ID
+
+    EQUALS          shift and go to state 78
+
+
+state 64
+
+    (24) statement -> PRINT STRING .
+
+    RBRACE          reduce using rule 24 (statement -> PRINT STRING .)
+    DESC            reduce using rule 24 (statement -> PRINT STRING .)
+    SAIDA           reduce using rule 24 (statement -> PRINT STRING .)
+    OBJETO          reduce using rule 24 (statement -> PRINT STRING .)
+    ESTADO          reduce using rule 24 (statement -> PRINT STRING .)
+    QUANDO          reduce using rule 24 (statement -> PRINT STRING .)
+    FAZER           reduce using rule 24 (statement -> PRINT STRING .)
+    SALA_ATUAL_EH   reduce using rule 24 (statement -> PRINT STRING .)
+    TEM_ITEM        reduce using rule 24 (statement -> PRINT STRING .)
+    ESTADO_SALA_EH  reduce using rule 24 (statement -> PRINT STRING .)
+    PRINT           reduce using rule 24 (statement -> PRINT STRING .)
+    GANHAR_ITEM     reduce using rule 24 (statement -> PRINT STRING .)
+    PERDER_ITEM     reduce using rule 24 (statement -> PRINT STRING .)
+    GANHAR_ECO      reduce using rule 24 (statement -> PRINT STRING .)
+    REMOVER_OBJETO  reduce using rule 24 (statement -> PRINT STRING .)
+    DEFINIR_ESTADO  reduce using rule 24 (statement -> PRINT STRING .)
+    DEFINIR_SAIDAS  reduce using rule 24 (statement -> PRINT STRING .)
+    FIMDEJOGO       reduce using rule 24 (statement -> PRINT STRING .)
+    TELEPORTAR      reduce using rule 24 (statement -> PRINT STRING .)
+
+
+state 65
+
+    (25) statement -> GANHAR_ITEM ID .
+
+    RBRACE          reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    DESC            reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    SAIDA           reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    OBJETO          reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    ESTADO          reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    QUANDO          reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    FAZER           reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    SALA_ATUAL_EH   reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    TEM_ITEM        reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    ESTADO_SALA_EH  reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    PRINT           reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    GANHAR_ITEM     reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    PERDER_ITEM     reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    GANHAR_ECO      reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    REMOVER_OBJETO  reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    DEFINIR_ESTADO  reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    DEFINIR_SAIDAS  reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    FIMDEJOGO       reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+    TELEPORTAR      reduce using rule 25 (statement -> GANHAR_ITEM ID .)
+
+
+state 66
+
+    (26) statement -> PERDER_ITEM ID .
+
+    RBRACE          reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    DESC            reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    SAIDA           reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    OBJETO          reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    ESTADO          reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    QUANDO          reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    FAZER           reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    SALA_ATUAL_EH   reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    TEM_ITEM        reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    ESTADO_SALA_EH  reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    PRINT           reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    GANHAR_ITEM     reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    PERDER_ITEM     reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    GANHAR_ECO      reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    REMOVER_OBJETO  reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    DEFINIR_ESTADO  reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    DEFINIR_SAIDAS  reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    FIMDEJOGO       reduce using rule 26 (statement -> PERDER_ITEM ID .)
+    TELEPORTAR      reduce using rule 26 (statement -> PERDER_ITEM ID .)
+
+
+state 67
+
+    (27) statement -> GANHAR_ECO ID .
+
+    RBRACE          reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    DESC            reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    SAIDA           reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    OBJETO          reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    ESTADO          reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    QUANDO          reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    FAZER           reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    SALA_ATUAL_EH   reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    TEM_ITEM        reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    ESTADO_SALA_EH  reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    PRINT           reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    GANHAR_ITEM     reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    PERDER_ITEM     reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    GANHAR_ECO      reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    REMOVER_OBJETO  reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    DEFINIR_ESTADO  reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    DEFINIR_SAIDAS  reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    FIMDEJOGO       reduce using rule 27 (statement -> GANHAR_ECO ID .)
+    TELEPORTAR      reduce using rule 27 (statement -> GANHAR_ECO ID .)
+
+
+state 68
+
+    (28) statement -> REMOVER_OBJETO ID .
+
+    RBRACE          reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    DESC            reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    SAIDA           reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    OBJETO          reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    ESTADO          reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    QUANDO          reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    FAZER           reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    SALA_ATUAL_EH   reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    TEM_ITEM        reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    ESTADO_SALA_EH  reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    PRINT           reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    GANHAR_ITEM     reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    PERDER_ITEM     reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    GANHAR_ECO      reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    REMOVER_OBJETO  reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    DEFINIR_ESTADO  reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    DEFINIR_SAIDAS  reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    FIMDEJOGO       reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+    TELEPORTAR      reduce using rule 28 (statement -> REMOVER_OBJETO ID .)
+
+
+state 69
+
+    (29) statement -> DEFINIR_ESTADO ID . EQUALS ID
+
+    EQUALS          shift and go to state 79
+
+
+state 70
+
+    (30) statement -> DEFINIR_SAIDAS LBRACE . statement_list RBRACE
+    (12) statement_list -> . statement_list statement
+    (13) statement_list -> . empty
+    (33) empty -> .
+
+    RBRACE          reduce using rule 33 (empty -> .)
+    DESC            reduce using rule 33 (empty -> .)
+    SAIDA           reduce using rule 33 (empty -> .)
+    OBJETO          reduce using rule 33 (empty -> .)
+    ESTADO          reduce using rule 33 (empty -> .)
+    QUANDO          reduce using rule 33 (empty -> .)
+    FAZER           reduce using rule 33 (empty -> .)
+    SALA_ATUAL_EH   reduce using rule 33 (empty -> .)
+    TEM_ITEM        reduce using rule 33 (empty -> .)
+    ESTADO_SALA_EH  reduce using rule 33 (empty -> .)
+    PRINT           reduce using rule 33 (empty -> .)
+    GANHAR_ITEM     reduce using rule 33 (empty -> .)
+    PERDER_ITEM     reduce using rule 33 (empty -> .)
+    GANHAR_ECO      reduce using rule 33 (empty -> .)
+    REMOVER_OBJETO  reduce using rule 33 (empty -> .)
+    DEFINIR_ESTADO  reduce using rule 33 (empty -> .)
+    DEFINIR_SAIDAS  reduce using rule 33 (empty -> .)
+    FIMDEJOGO       reduce using rule 33 (empty -> .)
+    TELEPORTAR      reduce using rule 33 (empty -> .)
+
+    statement_list                 shift and go to state 80
+    empty                          shift and go to state 28
+
+state 71
+
+    (31) statement -> FIMDEJOGO STRING .
+
+    RBRACE          reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    DESC            reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    SAIDA           reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    OBJETO          reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    ESTADO          reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    QUANDO          reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    FAZER           reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    SALA_ATUAL_EH   reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    TEM_ITEM        reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    ESTADO_SALA_EH  reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    PRINT           reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    GANHAR_ITEM     reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    PERDER_ITEM     reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    GANHAR_ECO      reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    REMOVER_OBJETO  reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    DEFINIR_ESTADO  reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    DEFINIR_SAIDAS  reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    FIMDEJOGO       reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+    TELEPORTAR      reduce using rule 31 (statement -> FIMDEJOGO STRING .)
+
+
+state 72
+
+    (32) statement -> TELEPORTAR ID .
+
+    RBRACE          reduce using rule 32 (statement -> TELEPORTAR ID .)
+    DESC            reduce using rule 32 (statement -> TELEPORTAR ID .)
+    SAIDA           reduce using rule 32 (statement -> TELEPORTAR ID .)
+    OBJETO          reduce using rule 32 (statement -> TELEPORTAR ID .)
+    ESTADO          reduce using rule 32 (statement -> TELEPORTAR ID .)
+    QUANDO          reduce using rule 32 (statement -> TELEPORTAR ID .)
+    FAZER           reduce using rule 32 (statement -> TELEPORTAR ID .)
+    SALA_ATUAL_EH   reduce using rule 32 (statement -> TELEPORTAR ID .)
+    TEM_ITEM        reduce using rule 32 (statement -> TELEPORTAR ID .)
+    ESTADO_SALA_EH  reduce using rule 32 (statement -> TELEPORTAR ID .)
+    PRINT           reduce using rule 32 (statement -> TELEPORTAR ID .)
+    GANHAR_ITEM     reduce using rule 32 (statement -> TELEPORTAR ID .)
+    PERDER_ITEM     reduce using rule 32 (statement -> TELEPORTAR ID .)
+    GANHAR_ECO      reduce using rule 32 (statement -> TELEPORTAR ID .)
+    REMOVER_OBJETO  reduce using rule 32 (statement -> TELEPORTAR ID .)
+    DEFINIR_ESTADO  reduce using rule 32 (statement -> TELEPORTAR ID .)
+    DEFINIR_SAIDAS  reduce using rule 32 (statement -> TELEPORTAR ID .)
+    FIMDEJOGO       reduce using rule 32 (statement -> TELEPORTAR ID .)
+    TELEPORTAR      reduce using rule 32 (statement -> TELEPORTAR ID .)
+
+
+state 73
+
+    (15) statement -> SAIDA ID ID .
+
+    RBRACE          reduce using rule 15 (statement -> SAIDA ID ID .)
+    DESC            reduce using rule 15 (statement -> SAIDA ID ID .)
+    SAIDA           reduce using rule 15 (statement -> SAIDA ID ID .)
+    OBJETO          reduce using rule 15 (statement -> SAIDA ID ID .)
+    ESTADO          reduce using rule 15 (statement -> SAIDA ID ID .)
+    QUANDO          reduce using rule 15 (statement -> SAIDA ID ID .)
+    FAZER           reduce using rule 15 (statement -> SAIDA ID ID .)
+    SALA_ATUAL_EH   reduce using rule 15 (statement -> SAIDA ID ID .)
+    TEM_ITEM        reduce using rule 15 (statement -> SAIDA ID ID .)
+    ESTADO_SALA_EH  reduce using rule 15 (statement -> SAIDA ID ID .)
+    PRINT           reduce using rule 15 (statement -> SAIDA ID ID .)
+    GANHAR_ITEM     reduce using rule 15 (statement -> SAIDA ID ID .)
+    PERDER_ITEM     reduce using rule 15 (statement -> SAIDA ID ID .)
+    GANHAR_ECO      reduce using rule 15 (statement -> SAIDA ID ID .)
+    REMOVER_OBJETO  reduce using rule 15 (statement -> SAIDA ID ID .)
+    DEFINIR_ESTADO  reduce using rule 15 (statement -> SAIDA ID ID .)
+    DEFINIR_SAIDAS  reduce using rule 15 (statement -> SAIDA ID ID .)
+    FIMDEJOGO       reduce using rule 15 (statement -> SAIDA ID ID .)
+    TELEPORTAR      reduce using rule 15 (statement -> SAIDA ID ID .)
+
+
+state 74
+
+    (16) statement -> OBJETO ID STRING .
+    (17) statement -> OBJETO ID STRING . LBRACE REVELA ID RBRACE
+
+    RBRACE          reduce using rule 16 (statement -> OBJETO ID STRING .)
+    DESC            reduce using rule 16 (statement -> OBJETO ID STRING .)
+    SAIDA           reduce using rule 16 (statement -> OBJETO ID STRING .)
+    OBJETO          reduce using rule 16 (statement -> OBJETO ID STRING .)
+    ESTADO          reduce using rule 16 (statement -> OBJETO ID STRING .)
+    QUANDO          reduce using rule 16 (statement -> OBJETO ID STRING .)
+    FAZER           reduce using rule 16 (statement -> OBJETO ID STRING .)
+    SALA_ATUAL_EH   reduce using rule 16 (statement -> OBJETO ID STRING .)
+    TEM_ITEM        reduce using rule 16 (statement -> OBJETO ID STRING .)
+    ESTADO_SALA_EH  reduce using rule 16 (statement -> OBJETO ID STRING .)
+    PRINT           reduce using rule 16 (statement -> OBJETO ID STRING .)
+    GANHAR_ITEM     reduce using rule 16 (statement -> OBJETO ID STRING .)
+    PERDER_ITEM     reduce using rule 16 (statement -> OBJETO ID STRING .)
+    GANHAR_ECO      reduce using rule 16 (statement -> OBJETO ID STRING .)
+    REMOVER_OBJETO  reduce using rule 16 (statement -> OBJETO ID STRING .)
+    DEFINIR_ESTADO  reduce using rule 16 (statement -> OBJETO ID STRING .)
+    DEFINIR_SAIDAS  reduce using rule 16 (statement -> OBJETO ID STRING .)
+    FIMDEJOGO       reduce using rule 16 (statement -> OBJETO ID STRING .)
+    TELEPORTAR      reduce using rule 16 (statement -> OBJETO ID STRING .)
+    LBRACE          shift and go to state 81
+
+
+state 75
+
+    (18) statement -> ESTADO ID EQUALS . ID
+
+    ID              shift and go to state 82
+
+
+state 76
+
+    (19) statement -> QUANDO LBRACE statement_list . RBRACE
+    (12) statement_list -> statement_list . statement
+    (14) statement -> . DESC STRING
+    (15) statement -> . SAIDA ID ID
+    (16) statement -> . OBJETO ID STRING
+    (17) statement -> . OBJETO ID STRING LBRACE REVELA ID RBRACE
+    (18) statement -> . ESTADO ID EQUALS ID
+    (19) statement -> . QUANDO LBRACE statement_list RBRACE
+    (20) statement -> . FAZER LBRACE statement_list RBRACE
+    (21) statement -> . SALA_ATUAL_EH ID
+    (22) statement -> . TEM_ITEM ID
+    (23) statement -> . ESTADO_SALA_EH ID EQUALS ID
+    (24) statement -> . PRINT STRING
+    (25) statement -> . GANHAR_ITEM ID
+    (26) statement -> . PERDER_ITEM ID
+    (27) statement -> . GANHAR_ECO ID
+    (28) statement -> . REMOVER_OBJETO ID
+    (29) statement -> . DEFINIR_ESTADO ID EQUALS ID
+    (30) statement -> . DEFINIR_SAIDAS LBRACE statement_list RBRACE
+    (31) statement -> . FIMDEJOGO STRING
+    (32) statement -> . TELEPORTAR ID
+
+    RBRACE          shift and go to state 83
+    DESC            shift and go to state 34
+    SAIDA           shift and go to state 35
+    OBJETO          shift and go to state 36
+    ESTADO          shift and go to state 37
+    QUANDO          shift and go to state 38
+    FAZER           shift and go to state 39
+    SALA_ATUAL_EH   shift and go to state 40
+    TEM_ITEM        shift and go to state 41
+    ESTADO_SALA_EH  shift and go to state 42
+    PRINT           shift and go to state 43
+    GANHAR_ITEM     shift and go to state 44
+    PERDER_ITEM     shift and go to state 45
+    GANHAR_ECO      shift and go to state 46
+    REMOVER_OBJETO  shift and go to state 47
+    DEFINIR_ESTADO  shift and go to state 48
+    DEFINIR_SAIDAS  shift and go to state 49
+    FIMDEJOGO       shift and go to state 50
+    TELEPORTAR      shift and go to state 51
+
+    statement                      shift and go to state 33
+
+state 77
+
+    (20) statement -> FAZER LBRACE statement_list . RBRACE
+    (12) statement_list -> statement_list . statement
+    (14) statement -> . DESC STRING
+    (15) statement -> . SAIDA ID ID
+    (16) statement -> . OBJETO ID STRING
+    (17) statement -> . OBJETO ID STRING LBRACE REVELA ID RBRACE
+    (18) statement -> . ESTADO ID EQUALS ID
+    (19) statement -> . QUANDO LBRACE statement_list RBRACE
+    (20) statement -> . FAZER LBRACE statement_list RBRACE
+    (21) statement -> . SALA_ATUAL_EH ID
+    (22) statement -> . TEM_ITEM ID
+    (23) statement -> . ESTADO_SALA_EH ID EQUALS ID
+    (24) statement -> . PRINT STRING
+    (25) statement -> . GANHAR_ITEM ID
+    (26) statement -> . PERDER_ITEM ID
+    (27) statement -> . GANHAR_ECO ID
+    (28) statement -> . REMOVER_OBJETO ID
+    (29) statement -> . DEFINIR_ESTADO ID EQUALS ID
+    (30) statement -> . DEFINIR_SAIDAS LBRACE statement_list RBRACE
+    (31) statement -> . FIMDEJOGO STRING
+    (32) statement -> . TELEPORTAR ID
+
+    RBRACE          shift and go to state 84
+    DESC            shift and go to state 34
+    SAIDA           shift and go to state 35
+    OBJETO          shift and go to state 36
+    ESTADO          shift and go to state 37
+    QUANDO          shift and go to state 38
+    FAZER           shift and go to state 39
+    SALA_ATUAL_EH   shift and go to state 40
+    TEM_ITEM        shift and go to state 41
+    ESTADO_SALA_EH  shift and go to state 42
+    PRINT           shift and go to state 43
+    GANHAR_ITEM     shift and go to state 44
+    PERDER_ITEM     shift and go to state 45
+    GANHAR_ECO      shift and go to state 46
+    REMOVER_OBJETO  shift and go to state 47
+    DEFINIR_ESTADO  shift and go to state 48
+    DEFINIR_SAIDAS  shift and go to state 49
+    FIMDEJOGO       shift and go to state 50
+    TELEPORTAR      shift and go to state 51
+
+    statement                      shift and go to state 33
+
+state 78
+
+    (23) statement -> ESTADO_SALA_EH ID EQUALS . ID
+
+    ID              shift and go to state 85
+
+
+state 79
+
+    (29) statement -> DEFINIR_ESTADO ID EQUALS . ID
+
+    ID              shift and go to state 86
+
+
+state 80
+
+    (30) statement -> DEFINIR_SAIDAS LBRACE statement_list . RBRACE
+    (12) statement_list -> statement_list . statement
+    (14) statement -> . DESC STRING
+    (15) statement -> . SAIDA ID ID
+    (16) statement -> . OBJETO ID STRING
+    (17) statement -> . OBJETO ID STRING LBRACE REVELA ID RBRACE
+    (18) statement -> . ESTADO ID EQUALS ID
+    (19) statement -> . QUANDO LBRACE statement_list RBRACE
+    (20) statement -> . FAZER LBRACE statement_list RBRACE
+    (21) statement -> . SALA_ATUAL_EH ID
+    (22) statement -> . TEM_ITEM ID
+    (23) statement -> . ESTADO_SALA_EH ID EQUALS ID
+    (24) statement -> . PRINT STRING
+    (25) statement -> . GANHAR_ITEM ID
+    (26) statement -> . PERDER_ITEM ID
+    (27) statement -> . GANHAR_ECO ID
+    (28) statement -> . REMOVER_OBJETO ID
+    (29) statement -> . DEFINIR_ESTADO ID EQUALS ID
+    (30) statement -> . DEFINIR_SAIDAS LBRACE statement_list RBRACE
+    (31) statement -> . FIMDEJOGO STRING
+    (32) statement -> . TELEPORTAR ID
+
+    RBRACE          shift and go to state 87
+    DESC            shift and go to state 34
+    SAIDA           shift and go to state 35
+    OBJETO          shift and go to state 36
+    ESTADO          shift and go to state 37
+    QUANDO          shift and go to state 38
+    FAZER           shift and go to state 39
+    SALA_ATUAL_EH   shift and go to state 40
+    TEM_ITEM        shift and go to state 41
+    ESTADO_SALA_EH  shift and go to state 42
+    PRINT           shift and go to state 43
+    GANHAR_ITEM     shift and go to state 44
+    PERDER_ITEM     shift and go to state 45
+    GANHAR_ECO      shift and go to state 46
+    REMOVER_OBJETO  shift and go to state 47
+    DEFINIR_ESTADO  shift and go to state 48
+    DEFINIR_SAIDAS  shift and go to state 49
+    FIMDEJOGO       shift and go to state 50
+    TELEPORTAR      shift and go to state 51
+
+    statement                      shift and go to state 33
+
+state 81
+
+    (17) statement -> OBJETO ID STRING LBRACE . REVELA ID RBRACE
+
+    REVELA          shift and go to state 88
+
+
+state 82
+
+    (18) statement -> ESTADO ID EQUALS ID .
+
+    RBRACE          reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    DESC            reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    SAIDA           reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    OBJETO          reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    ESTADO          reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    QUANDO          reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    FAZER           reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    SALA_ATUAL_EH   reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    TEM_ITEM        reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    ESTADO_SALA_EH  reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    PRINT           reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    GANHAR_ITEM     reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    PERDER_ITEM     reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    GANHAR_ECO      reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    REMOVER_OBJETO  reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    DEFINIR_ESTADO  reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    DEFINIR_SAIDAS  reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    FIMDEJOGO       reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+    TELEPORTAR      reduce using rule 18 (statement -> ESTADO ID EQUALS ID .)
+
+
+state 83
+
+    (19) statement -> QUANDO LBRACE statement_list RBRACE .
+
+    RBRACE          reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    DESC            reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    SAIDA           reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    OBJETO          reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    ESTADO          reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    QUANDO          reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    FAZER           reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    SALA_ATUAL_EH   reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    TEM_ITEM        reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    ESTADO_SALA_EH  reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    PRINT           reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    GANHAR_ITEM     reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    PERDER_ITEM     reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    GANHAR_ECO      reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    REMOVER_OBJETO  reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    DEFINIR_ESTADO  reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    DEFINIR_SAIDAS  reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    FIMDEJOGO       reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+    TELEPORTAR      reduce using rule 19 (statement -> QUANDO LBRACE statement_list RBRACE .)
+
+
+state 84
+
+    (20) statement -> FAZER LBRACE statement_list RBRACE .
+
+    RBRACE          reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    DESC            reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    SAIDA           reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    OBJETO          reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    ESTADO          reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    QUANDO          reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    FAZER           reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    SALA_ATUAL_EH   reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    TEM_ITEM        reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    ESTADO_SALA_EH  reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    PRINT           reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    GANHAR_ITEM     reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    PERDER_ITEM     reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    GANHAR_ECO      reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    REMOVER_OBJETO  reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    DEFINIR_ESTADO  reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    DEFINIR_SAIDAS  reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    FIMDEJOGO       reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+    TELEPORTAR      reduce using rule 20 (statement -> FAZER LBRACE statement_list RBRACE .)
+
+
+state 85
+
+    (23) statement -> ESTADO_SALA_EH ID EQUALS ID .
+
+    RBRACE          reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    DESC            reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    SAIDA           reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    OBJETO          reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    ESTADO          reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    QUANDO          reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    FAZER           reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    SALA_ATUAL_EH   reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    TEM_ITEM        reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    ESTADO_SALA_EH  reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    PRINT           reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    GANHAR_ITEM     reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    PERDER_ITEM     reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    GANHAR_ECO      reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    REMOVER_OBJETO  reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    DEFINIR_ESTADO  reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    DEFINIR_SAIDAS  reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    FIMDEJOGO       reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+    TELEPORTAR      reduce using rule 23 (statement -> ESTADO_SALA_EH ID EQUALS ID .)
+
+
+state 86
+
+    (29) statement -> DEFINIR_ESTADO ID EQUALS ID .
+
+    RBRACE          reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    DESC            reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    SAIDA           reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    OBJETO          reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    ESTADO          reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    QUANDO          reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    FAZER           reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    SALA_ATUAL_EH   reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    TEM_ITEM        reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    ESTADO_SALA_EH  reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    PRINT           reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    GANHAR_ITEM     reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    PERDER_ITEM     reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    GANHAR_ECO      reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    REMOVER_OBJETO  reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    DEFINIR_ESTADO  reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    DEFINIR_SAIDAS  reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    FIMDEJOGO       reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+    TELEPORTAR      reduce using rule 29 (statement -> DEFINIR_ESTADO ID EQUALS ID .)
+
+
+state 87
+
+    (30) statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .
+
+    RBRACE          reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    DESC            reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    SAIDA           reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    OBJETO          reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    ESTADO          reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    QUANDO          reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    FAZER           reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    SALA_ATUAL_EH   reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    TEM_ITEM        reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    ESTADO_SALA_EH  reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    PRINT           reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    GANHAR_ITEM     reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    PERDER_ITEM     reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    GANHAR_ECO      reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    REMOVER_OBJETO  reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    DEFINIR_ESTADO  reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    DEFINIR_SAIDAS  reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    FIMDEJOGO       reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+    TELEPORTAR      reduce using rule 30 (statement -> DEFINIR_SAIDAS LBRACE statement_list RBRACE .)
+
+
+state 88
+
+    (17) statement -> OBJETO ID STRING LBRACE REVELA . ID RBRACE
+
+    ID              shift and go to state 89
+
+
+state 89
+
+    (17) statement -> OBJETO ID STRING LBRACE REVELA ID . RBRACE
+
+    RBRACE          shift and go to state 90
+
+
+state 90
+
+    (17) statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .
+
+    RBRACE          reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    DESC            reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    SAIDA           reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    OBJETO          reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    ESTADO          reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    QUANDO          reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    FAZER           reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    SALA_ATUAL_EH   reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    TEM_ITEM        reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    ESTADO_SALA_EH  reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    PRINT           reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    GANHAR_ITEM     reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    PERDER_ITEM     reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    GANHAR_ECO      reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    REMOVER_OBJETO  reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    DEFINIR_ESTADO  reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    DEFINIR_SAIDAS  reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    FIMDEJOGO       reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
+    TELEPORTAR      reduce using rule 17 (statement -> OBJETO ID STRING LBRACE REVELA ID RBRACE .)
 
