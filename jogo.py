@@ -106,8 +106,24 @@ def exibir_localizacao():
     # --- FIM DO NOVO BLOCO ---
 
     objetos_disponiveis = loc_data.get('objetos', {})
-    if objetos_disponiveis:
-        print("\nVocê também nota:", ", ".join(obj.replace('_', ' ').title() for obj in objetos_disponiveis.keys()))
+    objetos_para_exibir = []  # Uma nova lista apenas com os objetos que realmente devem aparecer
+    # Pega o estado 'purificada' da sala. Se não existir, considera como False.
+    estado_purificada = loc_data.get('estado', {}).get('purificada', False)
+    # Itera sobre todos os objetos definidos para a sala
+    for obj_id in objetos_disponiveis.keys():
+        # Se a sala for a arvore_seca, aplicamos uma regra especial
+        if loc_id == 'arvore_seca':
+            if obj_id == 'arvore' and not estado_purificada:
+                objetos_para_exibir.append(obj_id)
+            elif obj_id == 'broto' and estado_purificada:
+                objetos_para_exibir.append(obj_id)
+        else:
+            # Para todas as outras salas, exibe todos os objetos normalmente
+            objetos_para_exibir.append(obj_id)
+
+    # No final, imprime apenas os objetos da lista filtrada
+    if objetos_para_exibir:
+        print("\nVocê também nota:", ", ".join(obj.replace('_', ' ').title() for obj in objetos_para_exibir))
 
     itens_na_sala = loc_data.get('itens', [])
     if itens_na_sala:
@@ -124,40 +140,65 @@ def processar_comando(comando, alvo):
 
 
   # --- LÓGICA DO EVENTO DO CEMITÉRIO (FASE DE PERIGO) ---
-    if loc_id == 'cemiterio_abandonado' and ESTADO_JOGADOR['evento_cemiterio']['alerta_ativo']:
-        # Marca o evento como concluído para não acontecer de novo
-        ESTADO_JOGADOR['evento_cemiterio']['evento_concluido'] = True # <--- MUDANÇA 1
+    if loc_id in ['cemiterio_abandonado', 'arvore_seca'] and ESTADO_JOGADOR['evento_cemiterio']['alerta_ativo']:
         
+        # Lista de comandos "meta" que não devem causar falha no evento
+        comandos_meta = ['dica', 'noob', 'inventario', 'i', 'ecos', 'ajuda', 'help', 'h']
+
+        # Primeiro, verifica se a ação do jogador resolve o evento (sucesso ou fuga)
         if comando == 'usar' and alvo == 'incenso' and 'incenso' in ESTADO_JOGADOR['inventario']:
-            print("Lembrando das lendas, você rapidamente acende o incenso. Uma fumaça com cheiro de mata te envolve, te escondendo dos olhos do mundo sobrenatural. Você se agacha atrás de uma lápide quebrada e espera, o coração martelando no peito.")
-            print("\nSegundos depois, um som de trovoada enche o ar. Uma figura aterrorizante galopa pelo cemitério: uma mula em chamas, com fogo jorrando do pescoço. Ela passa furiosamente a poucos metros de você, mas parece não notar sua presença. Tão rápido quanto chegou, ela desaparece no caminho a leste. Você está a salvo.")
+            print("Lembrando das lendas, você rapidamente acende o incenso...")
+            # ... (resto da lógica de sucesso) ...
             ESTADO_JOGADOR['evento_cemiterio']['alerta_ativo'] = False
-            ESTADO_JOGADOR['evento_cemiterio']['contador_acoes'] = 0
             if 'mula' not in ESTADO_JOGADOR['ecos_coletados']:
                 ESTADO_JOGADOR['ecos_coletados'].append('mula')
-                print(f"\nVocê sente um eco (mula) ressoar em sua alma. Você obteve um Eco da Libertação, digite ecos para analisa-lo.")
-        elif comando == 'ir' and alvo == 'sul': 
-            print("O pânico toma conta de você. Você se vira e corre de volta para a clareira, sem olhar para trás, enquanto o som de cascos trovejantes se aproxima e o chão treme... Você escapou por um triz, mas a sensação de pavor te persegue.")
+                print(f"\nVocê sente um eco (mula) ressoar em sua alma...")
+            ESTADO_JOGADOR['evento_cemiterio']['evento_concluido'] = True
+            return # O evento acabou, a função para aqui.
+
+        elif comando == 'ir' and alvo == 'sul':
+            print("O pânico toma conta de você. Você se vira e corre de volta para a clareira...")
+            # ... (resto da lógica de fuga) ...
             ESTADO_JOGADOR['localizacao_atual'] = MUNDO[loc_id]['saidas']['sul']
             ESTADO_JOGADOR['evento_cemiterio']['alerta_ativo'] = False
-            ESTADO_JOGADOR['evento_cemiterio']['contador_acoes'] = 0
+            ESTADO_JOGADOR['evento_cemiterio']['evento_concluido'] = True
             exibir_localizacao()
+            return # O evento acabou, a função para aqui.
+
+        # Se não foi uma ação de sucesso ou fuga, verifica se é um comando "meta"
+        elif comando in comandos_meta:
+            pass
+        
+        # Se não for NENHUMA das opções acima, é uma ação de falha.
         else:
             print("Você fica paralisado pelo medo, sem saber o que fazer...")
-            print("\nAntes que você possa reagir, o som de cascos trovejantes está em cima de você. Uma mula em chamas, com fogo no lugar da cabeça, irrompe no cemitério. Não há tempo para gritar. Você é atropelado por uma força profana de fogo e fúria. FIM DE JOGO.")
+            print("\nAntes que você possa reagir, o som de cascos trovejantes está em cima de você...")
             ESTADO_JOGADOR['jogo_terminado'] = True
-        return 
+            return # O jogo acabou, a função para aqui.
     
     # 1. Perigos Ambientais (lógica da Iara)
     if loc_id == 'lagoa' and not ESTADO_JOGADOR['estados_ativos']['protegido_da_cancao']:
+        
+        # Lista de comandos "meta" que não causam morte pela canção
+        comandos_meta = ['dica', 'noob', 'inventario', 'i', 'ecos', 'ajuda', 'help', 'h']
+
+        # CONDIÇÃO DE SUCESSO: O jogador se protege
         if comando == 'usar' and alvo == 'cera_de_ouvido' and 'cera_de_ouvido' in ESTADO_JOGADOR['inventario']:
             ESTADO_JOGADOR['estados_ativos']['protegido_da_cancao'] = True
             print("Você rapidamente coloca a cera pegajosa nos ouvidos. O mundo fica abafado e distante. A canção da Iara, antes avassaladora, agora é apenas um murmúrio triste e inofensivo no fundo da sua mente. Você está seguro. No centro da lagoa, a melodia para. Uma figura emerge das águas e te encara.")
-            return
+            return # O turno de perigo acabou, a função para aqui.
+        
+        # CONDIÇÃO NEUTRA: O jogador usa um comando seguro
+        elif comando in comandos_meta:
+            # Se for um comando seguro, não faz nada aqui. A execução continua
+            # para o resto da função, onde o comando será de fato processado.
+            pass
+        
+        # CONDIÇÃO DE FALHA: O jogador faz qualquer outra ação de jogo e morre
         else:
             print("A canção domina seus pensamentos. Esquecer... apagar a dor... A água parece quente e convidativa. Você dá um passo, depois outro, e a escuridão líquida te abraça, te puxando para o silêncio eterno do fundo. FIM DE JOGO.")
             ESTADO_JOGADOR['jogo_terminado'] = True
-            return
+            return # O jogo acabou, a função para aqui.
             
     # 2. Interações Específicas (Puzzles do .txt)
     for interacao in INTERACOES:
@@ -208,9 +249,29 @@ def processar_comando(comando, alvo):
         else: print(f"Não há '{alvo}' para examinar aqui.")
             
     elif comando == 'pegar':
-        if not alvo: print("Pegar o quê?")
-        elif alvo in loc_data.get('itens', []): loc_data['itens'].remove(alvo); ESTADO_JOGADOR['inventario'].append(alvo); print(f"Você pegou: {ITENS[alvo]['nome']}")
-        else: print(f"Não há '{alvo}' para pegar aqui.")
+        if not alvo:
+            print("Pegar o quê?")
+            return
+
+        # 1. Primeiro, tenta pegar como um item que já está "solto" na sala.
+        if alvo in loc_data.get('itens', []):
+            loc_data['itens'].remove(alvo)
+            ESTADO_JOGADOR['inventario'].append(alvo)
+            print(f"Você pegou: {ITENS[alvo]['nome']}")
+        
+        # 2. Se não achou, verifica se há um OBJETO com o mesmo nome que pode REVELAR o item.
+        elif alvo in loc_data.get('objetos', {}) and loc_data.get('objetos', {})[alvo].get('revela') == alvo:
+            # Pega o item diretamente do objeto e o coloca no inventário.
+            ESTADO_JOGADOR['inventario'].append(alvo)
+            print(f"Você pegou: {ITENS[alvo]['nome']}")
+            # Remove a propriedade 'revela' para não ser pego de novo.
+            loc_data.get('objetos', {})[alvo].pop('revela')
+            # Opcional: Se quiser que o objeto desapareça após pegar o item, descomente a linha abaixo.
+            # del loc_data.get('objetos', {})[alvo]
+
+        # 3. Se nenhuma das condições acima funcionou, o item realmente não está disponível.
+        else:
+            print(f"Não há '{alvo}' para pegar aqui.")
 
     elif comando == 'usar' and alvo == 'mapa':
         if 'mapa' in ESTADO_JOGADOR['inventario']:
@@ -237,7 +298,9 @@ def processar_comando(comando, alvo):
         else: print("Nada acontece.")
     
      # <--- LÓGICA DO COMANDO 'ECOS' ATUALIZADA ---
-    elif comando in ['ecos', 'lembrancas']:
+    elif (comando in ['ecos', 'lembrancas']) or \
+     (comando == 'usar' and alvo == 'ecos') or \
+     (comando == 'entregar' and alvo == 'ecos'):
         # Comportamento especial se estiver na sala da Mãe de Ouro
         if loc_id == 'mae_de_ouro':
             # --- LÓGICA DO JULGAMENTO FINAL ---
@@ -265,12 +328,16 @@ def processar_comando(comando, alvo):
                 [print(f"[{ECOS[eco_id]['titulo']}]\n   '{ECOS[eco_id]['descricao']}'") for eco_id in ESTADO_JOGADOR['ecos_coletados']]
                 print("-------------------------")
             
+    elif comando in ['noob', 'dica']:
+        exibir_dicas_noob()
+    
     elif comando in ['inventario', 'i']:
         if not ESTADO_JOGADOR['inventario']: print("Seu inventário está vazio.")
         else: print("Seu inventário:"); [print(f"- {ITENS[item_id]['nome']}: {ITENS[item_id]['descricao']}") for item_id in ESTADO_JOGADOR['inventario']]
             
     elif comando in ['ajuda', 'help', 'h']:
-         print("\nComandos: ir, examinar, pegar, usar, entregar, falar com, inventario, ecos, mapa, iniciar, sair")
+        print("\nComandos do Jogo: ir, examinar, pegar, usar, entregar, falar com")
+        print("Comandos de Utilidade: inventario (i), ecos, mapa, ajuda (h), dica/noob, iniciar, sair")
          
     else:
         print("Não entendi esse comando.")
@@ -281,6 +348,62 @@ def processar_comando(comando, alvo):
         if ESTADO_JOGADOR['evento_cemiterio']['contador_acoes'] >= 4:
             print("\nDe repente, um grito gutural e desumano ecoa pela floresta, vindo de muito longe. Não é um grito de dor, mas um aviso. Um Bradador. O som te causa um arrepio profundo na espinha. Um mal antigo se aproxima. Rápido.")
             ESTADO_JOGADOR['evento_cemiterio']['alerta_ativo'] = True
+
+def exibir_dicas_noob():
+    """Analisa o estado do jogo e exibe dicas contextuais, que evoluem com o jogador."""
+    
+    # --- MODO 1: Dicas Iniciais (Antes do Primeiro Puzzle) ---
+    if 'cachimbo_de_barro' not in ESTADO_JOGADOR['inventario'] and 'tela_de_inicio' not in ESTADO_JOGADOR.get('localizacao_atual', ''):
+        print("\n--- Sussurros da Floresta ---")
+        print("Lendas antigas ecoam em sua mente, fragmentos de sabedoria para sobreviver a esta floresta amaldiçoada:")
+        print("\n- O protetor da mata, Curupira, com suas pegadas invertidas, confunde aqueles que não carregam um símbolo de respeito para iluminar o caminho correto.")
+        print("- O grito do bradador é um aviso de perigo. Se você ouvir, é melhor correr ou se proteger com algo que te disfarce do galope flamejante.")
+        print("- Uma árvore sempre será seca enquanto não houver água para salvá-la.")
+        print("- O menino de uma perna só, Saci, é um mestre da travessura e da fumaça. Uma oferenda de bom fumo sempre acalma seu espírito zombeteiro e abre passagens secretas.")
+        print("- A canção que emana da lagoa é um feitiço mortal da Iara. Para se aproximar dela, é preciso encontrar uma forma de criar o silêncio absoluto.")
+        print("- A velha Cuca, em sua gruta, é uma comerciante de magia. Ela é bem clara quando tenta conversar com ela e anseia por ingredientes raros, como a beleza de uma flor que desafia a própria morte.")
+        return # Mostra apenas estas dicas e para.
+
+    # --- MODO 2: Diário de Bordo (Meio/Fim de Jogo) ---
+    # Se o jogador já passou do primeiro puzzle, o sistema de dicas se torna mais direto.
+    print("\n--- Diário de Bordo da Alma ---")
+    
+    # Dica de Perigo Iminente (Prioridade Máxima)
+    loc_id = ESTADO_JOGADOR.get('localizacao_atual')
+    if ESTADO_JOGADOR['evento_cemiterio'].get('alerta_ativo', False):
+        if loc_id in ['cemiterio_abandonado', 'arvore_seca']:
+            if 'incenso' in ESTADO_JOGADOR['inventario']:
+                print("- PERIGO IMINENTE! O grito foi um aviso. Uma fumaça sagrada de certas ervas pode esconder sua presença de um mal antigo. Aja rápido!")
+            else:
+                print("- PERIGO IMINENTE! O grito foi um aviso. Você não tem nada que possa te proteger ou esconder. Sua única esperança é correr!")
+            return
+
+    # Verificação de Puzzles Pendentes
+    dica_impressa = False
+
+    if 'cachimbo_de_barro' in ESTADO_JOGADOR['inventario'] and 'incenso' not in ESTADO_JOGADOR['inventario']:
+        print("- Um espírito travesso bloqueia a trilha. Ele parece gostar de fumo, e você carrega uma oferenda apropriada.")
+        dica_impressa = True
+    
+    if 'flor_de_cera' in ESTADO_JOGADOR['inventario'] and 'cera_de_ouvido' not in ESTADO_JOGADOR['inventario']:
+        print("- A bruxa da gruta deseja uma 'beleza que não murcha'. A flor do cemitério se encaixa na descrição.")
+        dica_impressa = True
+
+    if 'cera_de_ouvido' in ESTADO_JOGADOR['inventario'] and 'agua_purificada' not in ESTADO_JOGADOR['inventario']:
+        print("- O canto da Iara é mortal. Com os ouvidos protegidos, talvez seja hora de uma conversa com o espírito da lagoa.")
+        dica_impressa = True
+
+    if 'agua_purificada' in ESTADO_JOGADOR['inventario'] and not MUNDO.get('arvore_seca', {}).get('estado', {}).get('purificada', False):
+        print("- A agonia da árvore seca clama por alívio. A água purificada que você carrega parece ser a única cura.")
+        dica_impressa = True
+
+    if len(ESTADO_JOGADOR['ecos_coletados']) < 5: 
+        print("- A Mãe de Ouro espera no coração da floresta, mas ela só o julgará quando você tiver provado sua redenção a todos os espíritos.")
+        dica_impressa = True
+
+    if not dica_impressa:
+        print("Todos os espíritos foram libertados. É hora de encarar a Mãe de Ouro e apresentar os ecos de sua jornada.")
+
 def main():
     if not carregar_mundo('jogo_completo.txt'): return
     
