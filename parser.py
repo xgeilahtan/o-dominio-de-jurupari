@@ -1,140 +1,93 @@
 # parser.py
 import ply.yacc as yacc
-from lexer import tokens, lexer # Importamos o lexer também para o teste
+from lexer import lexer, tokens # Importa o lexer diretamente
 
-# Dicionário para armazenar o mundo do jogo
-game_world = {
-    'rooms': {},
-    'items': {},
-    'commands': {}
-}
+# --- GRAMÁTICA (cria uma lista de definições - AST) ---
 
-# --- GRAMÁTICA ---
-
-def p_game_spec(p):
-    'game_spec : statement_list'
-    p[0] = game_world
-
-def p_statement_list_single(p):
-    'statement_list : statement'
-    pass
-
-def p_statement_list_multiple(p):
-    'statement_list : statement_list statement'
-    pass
-
-def p_statement(p):
-    '''statement : room_def
-                 | connect_def
-                 | item_def
-                 | command_def'''
-    pass
-
-def p_room_def(p):
-    'room_def : ROOM ID STRING'
-    room_name = p[2]
-    description = p[3]
-    game_world['rooms'][room_name] = {
-        'description': description,
-        'connections': {},
-        'items': []
-    }
-    print(f"Parser: Sala '{room_name}' criada.")
-
-def p_connect_def(p):
-    'connect_def : CONNECT ID DIRECTION ID'
-    source_room = p[2]
-    direction = p[3]
-    dest_room = p[4]
-    if source_room in game_world['rooms']:
-        game_world['rooms'][source_room]['connections'][direction] = dest_room
-        print(f"Parser: Conexão de '{source_room}' --{direction}--> '{dest_room}' criada.")
-    else:
-        print(f"Erro: Sala '{source_room}' não encontrada para criar conexão.")
-
-def p_item_def(p):
-    'item_def : ITEM ID STRING IN ID'
-    item_name = p[2]
-    description = p[3]
-    room_name = p[5]
-    if room_name in game_world['rooms']:
-        game_world['items'][item_name] = {'description': description, 'location': room_name}
-        game_world['rooms'][room_name]['items'].append(item_name)
-        print(f"Parser: Item '{item_name}' criado em '{room_name}'.")
-    else:
-        print(f"Erro: Sala '{room_name}' não encontrada para adicionar item.")
-
-def p_error(p):
-    if p:
-        print(f"Erro de sintaxe no token '{p.type}' ('{p.value}') na linha {p.lineno}")
-    else:
-        print("Erro de sintaxe no fim do arquivo!")
-
-# Adicione esta nova função ao parser.py
-def p_command_def(p):
-    'command_def : COMMAND ID ID COLON WHEN condition DO action_list'
-    verb = p[2]
-    target = p[3]
-    condition_data = p[6]
-    action_data = p[8]
-
-    # Armazenamos o comando de forma estruturada
-    command_key = f"{verb}_{target}"
-    game_world['commands'][command_key] = {
-        'verb': verb,
-        'target': target,
-        'condition': condition_data,
-        'actions': action_data
-    }
-    print(f"Parser: Comando '{command_key}' criado.")
-
-# Adicione estas novas funções ao parser.py
-def p_condition(p):
-    '''condition : ID IN ITEMS
-                 | ROOM IS STRING'''
-    if p[2] == 'in':
-        # Guarda a condição como uma tupla: ('in_inventory', 'nome_do_item')
-        p[0] = ('in_inventory', p[1]) 
-    elif p[2] == 'is':
-        # Guarda a condição como uma tupla: ('is_in_room', 'nome_da_sala')
-        p[0] = ('is_in_room', p[3])
-
-# Adicione estas novas funções ao parser.py
-def p_action_list_single(p):
-    'action_list : action'
-    p[0] = [ p[1] ] # Retorna uma lista contendo uma única ação
-
-def p_action_list_multiple(p):
-    'action_list : action_list AND action'
-    p[1].append(p[3]) # Adiciona a nova ação à lista existente
+def p_program(p):
+    'program : statement_list'
     p[0] = p[1]
 
-def p_action(p):
-    '''action : PRINT STRING
-              | GET ID
-              | RELEASE ID'''
-    # Guarda a ação como uma tupla: ('verbo', 'argumento')
-    p[0] = (p[1], p[2])
+def p_statement_list(p):
+    '''statement_list : statement_list statement
+                      | empty'''
+    if len(p) > 2 and p[2]:
+        p[0] = p[1] + [p[2]]
+    elif len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = []
 
+def p_statement(p):
+    '''statement : item_def
+                 | eco_def
+                 | room_def
+                 | interaction_def'''
+    p[0] = p[1]
 
+def p_item_def(p):
+    'item_def : ITEM ID STRING LBRACE DESC STRING RBRACE'
+    p[0] = ('item', {'id': p[2], 'nome': p[3], 'descricao': p[6]})
 
-# Construir o parser
-parser = yacc.yacc()
+def p_eco_def(p):
+    'eco_def : ECO ID STRING LBRACE DESC STRING RBRACE'
+    p[0] = ('eco', {'id': p[2], 'titulo': p[3], 'descricao': p[6]})
 
-# --- Rotina de Teste ---
-if __name__ == "__main__":
-    try:
-        with open('jogo_completo.txt', 'r', encoding='utf-8') as f:
-            data = f.read()
-    except FileNotFoundError:
-        print("Erro: Arquivo 'jogo_completo.txt' não encontrado.")
-        data = ''
+def p_room_def(p):
+    'room_def : ROOM ID STRING LBRACE statement_list RBRACE'
+    p[0] = ('room', {'id': p[2], 'nome': p[3], 'statements': p[5]})
 
-    # Faz o parsing da entrada
+def p_interaction_def(p):
+    'interaction_def : INTERACAO ID ID LBRACE statement_list RBRACE'
+    p[0] = ('interacao', {'verbo': p[2], 'alvo': p[3], 'statements': p[5]})
+
+def p_inline_statement(p):
+    '''statement : DESC STRING
+                 | SAIDA ID ID
+                 | OBJETO ID STRING
+                 | OBJETO ID STRING LBRACE REVELA ID RBRACE
+                 | ESTADO ID EQUALS ID
+                 | QUANDO LBRACE statement_list RBRACE
+                 | FAZER LBRACE statement_list RBRACE
+                 | SALA_ATUAL_EH ID
+                 | TEM_ITEM ID
+                 | ESTADO_SALA_EH ID EQUALS ID
+                 | PRINT STRING
+                 | GANHAR_ITEM ID
+                 | PERDER_ITEM ID
+                 | GANHAR_ECO ID
+                 | REMOVER_OBJETO ID
+                 | DEFINIR_ESTADO ID EQUALS ID
+                 | DEFINIR_SAIDAS LBRACE statement_list RBRACE
+                 | FIMDEJOGO STRING
+                 | TELEPORTAR ID'''
+    tipo = p[1].upper()
+    if tipo in ('ESTADO', 'DEFINIR_ESTADO', 'ESTADO_SALA_EH'): p[0] = (tipo, p[2], p[4])
+    elif tipo in ('QUANDO', 'FAZER', 'DEFINIR_SAIDAS'): p[0] = (tipo, p[3])
+    elif tipo == 'OBJETO' and len(p) > 4: p[0] = (tipo, p[2], p[3], {'revela': p[6]})
+    elif len(p) == 2: p[0] = (tipo,)
+    elif len(p) == 3: p[0] = (tipo, p[2])
+    elif len(p) == 4: p[0] = (tipo, p[2], p[3])
+
+def p_empty(p): 'empty :'
+pass
+
+def p_error(p):
+    if p: print(f"Erro de Sintaxe no token '{p.type}' com valor '{p.value}' na linha {p.lineno}")
+    else: print("Erro de Sintaxe no final do arquivo!")
+
+parser = yacc.yacc(debug=False)
+
+# --- FUNÇÃO DE INTERFACE DO PARSER (A PARTE QUE FALTAVA) ---
+# Adicione esta função no final do seu arquivo parser.py
+
+def get_ast(data):
+    """
+    Função principal para chamar o parser. Ela reseta o estado do lexer
+    e do parser para garantir que uma nova análise seja limpa.
+    """
+    # Reinicia o estado do lexer para o início do texto
+    lexer.lineno = 1
+    # Chama o parser
     result = parser.parse(data, lexer=lexer)
-    
-    # Imprime o resultado final para verificação
-    import json
-    print("\n--- ESTRUTURA DO MUNDO DO JOGO CRIADA ---")
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    print("--- FIM DO PARSING ---")
+    return result

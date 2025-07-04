@@ -1,10 +1,161 @@
-// Definições do mundo
-room cabana_velha "Uma cabana de madeira podre."
-room clareira_das_pegadas "Uma clareira onde o chão de terra mostra pegadas que apontam para trás."
+// ===============================================
+// ARQUIVO DE DEFINIÇÃO DO MUNDO - VERSÃO COMPLETA
+// ===============================================
 
-item amuleto_de_palha "Um amuleto trançado." in cabana_velha
+// --- ITENS ---
+ITEM amuleto_de_palha "Amuleto de Palha" { DESC "Um amuleto simples, trançado com palha seca. Parece quente ao toque." }
+ITEM cachimbo_de_barro "Cachimbo de Barro" { DESC "Um cachimbo de barro pequeno e liso, surpreendentemente leve. Ainda está um pouco quente." }
+ITEM incenso "Incenso de Ervas" { DESC "Um bastão de incenso de ervas aromáticas. A fumaça que ele soltaria parece ter propriedades calmantes e protetoras." }
+ITEM flor_de_cera "Flor de Cera" { DESC "Uma flor branca e delicada, com pétalas que parecem ser feitas de cera. Ela exala uma beleza fria e perpétua." }
+ITEM cera_de_ouvido "Cera de Ouvido" { DESC "Duas bolinhas de cera escura e pegajosa. Parecem capazes de abafar qualquer som." }
+ITEM agua_purificada "Água Purificada" { DESC "Uma esfera de água que flutua na palma da sua mão, brilhando com uma luz prateada. É fria ao toque e parece pulsar com uma energia melancólica." }
 
-// Definição de um comando
-command usar amuleto_de_palha: 
-    when amuleto_de_palha in items 
-    do print "Ao segurar o amuleto, as pegadas no chão brilham!"
+// --- ECOS ---
+ECO saci "O Eco do Saci" { DESC "A risada de um moleque travesso ecoa em sua mente, mas logo é sobreposta pelo som de um machado batendo em uma gameleira centenária. A lembrança não é sua, mas o remorso é." }
+ECO iara "O Eco da Iara" { DESC "Uma canção triste flui em seus pensamentos, a imagem de uma lágrima solitária caindo em águas puras. Em seguida, a visão de um rio poluído por óleo e cinzas de queimada. Você sente o peso da tristeza dela como se fosse sua." }
+ECO corpo_seco "O Eco do Corpo-Seco" { DESC "O grito silencioso de agonia se mistura com o estalar de galhos secos sob suas botas. A memória de uma floresta vibrante sendo transformada em um deserto de tocos ecoa, e o ódio amargo do espírito por um instante foi o seu." }
+
+// --- SALAS ---
+ROOM cabana_velha "Cabana Velha" {
+    DESC "É uma cabana pequena e abafada. O ar tem cheiro de mofo e folhas molhadas. Há uma mesa no centro, uma janela e uma porta ao norte."
+    SAIDA norte clareira_das_pegadas
+    OBJETO janela "Você se aproxima da janela, mas a escuridão lá fora é total, como se a noite fosse uma parede sólida. Você se sente observado."
+    OBJETO porta "A porta de madeira está fechada, mas não parece trancada. Ela emite um rangido baixo e constante. O caminho para o norte passa por ela."
+    OBJETO vela "A vela está derretida sobre um prato de metal e sua luz é a única coisa que te separa da escuridão total. Melhor deixá-la aí."
+    OBJETO mesa "A mesa de madeira está coberta de poeira. Em cima dela, ao lado da vela, você vê um amuleto de palha trançada." { REVELA amuleto_de_palha }
+}
+
+ROOM clareira_das_pegadas "Clareira das Pegadas" {
+    DESC "Você sai da cabana e entra em uma clareira circular. O chão é de terra batida e está coberto de incontáveis pegadas pequenas que parecem não levar a lugar nenhum."
+    OBJETO pegadas "As pegadas são pequenas, de pés com os calcanhares para frente. Elas se cruzam em um padrão caótico e hipnótico."
+    OBJETO floresta "A floresta densa cerca a clareira, formando uma parede de árvores silenciosas."
+    ESTADO amuleto_usado = false
+}
+
+ROOM trilha_do_saci "Trilha do Saci" {
+    DESC "Você entra em uma trilha estreita e sinuosa. O ar é carregado com o som de risadas travessas. Em um galho próximo, um gorro vermelho se destaca na penumbra."
+    SAIDA oeste clareira_das_pegadas
+    OBJETO trilha "A trilha é sinuosa e some na escuridão mais à frente. As risadas parecem vir do gorro vermelho."
+    OBJETO gorro "É um gorro de lã vermelha, com a ponta caída. Parece novo em folha e emana um calor sutil."
+    ESTADO barreira_ativa = true
+}
+
+ROOM gruta_da_cuca "Gruta da Cuca" {
+    DESC "A gruta é um laboratório enigmático. Ervas secas pendem do teto, potes de barro com ingredientes bizarros se alinham nas paredes. O foco principal é a Cuca e seu caldeirão borbulhante."
+    SAIDA leste clareira_das_pegadas
+    SAIDA sul lagoa
+    OBJETO cuca "Ela é mais alta do que parecia, com pele verde e enrugada e cabelos desgrenhados. Ela te observa com uma inteligência antiga e predadora."
+    OBJETO caldeirao "O líquido violeta no caldeirão solta bolhas que estouram em fumaça colorida. Aproximar-se sem ser convidado parece uma péssima ideia."
+    ESTADO puzzle_resolvido = false
+}
+
+ROOM lagoa "Lagoa da Iara" {
+    DESC "Você chega à margem de uma lagoa de águas paradas e escuras. Uma névoa baixa flutua sobre a superfície, e uma melodia triste e hipnótica parece vir do centro da água."
+    SAIDA norte gruta_da_cuca
+    OBJETO iara "Uma mulher de beleza estonteante e melancólica, com longos cabelos negros que se misturam com a água escura."
+    ESTADO iara_deu_recompensa = false
+}
+
+ROOM cemiterio_abandonado "Cemitério Abandonado" {
+    DESC "Cruzes podres e túmulos esquecidos marcam o terreno irregular. Entre eles, uma lápide de mármore solitária chama sua atenção. Você também nota trilhas de cascos queimados na terra."
+    SAIDA sul clareira_das_pegadas
+    SAIDA leste arvore_seca
+    SAIDA norte mae_de_ouro
+    OBJETO lapide "A lápide é de uma criança, o nome está ilegível. Aos pés dela, desafiando a podridão, cresce uma única e perfeita flor de cera branca." { REVELA flor_de_cera }
+}
+
+ROOM arvore_seca "Árvore Seca" {
+    DESC "Você chega a um lugar de profunda desolação. No centro, uma árvore enorme e seca estende seus galhos retorcidos para o céu. Um frio antinatural emana dela."
+    SAIDA oeste cemiterio_abandonado
+    OBJETO arvore "É um carvalho antigo, sem vida. A casca está rachada e cinzenta. A presença de um espírito rancoroso é tão forte que a própria madeira parece lamentar."
+    ESTADO purificada = false
+}
+
+ROOM mae_de_ouro "Mãe de Ouro" {
+    DESC "A caverna inteira parece viva. Os veios de ouro nas paredes brilham em um ritmo lento, como uma respiração. É um lugar de paz e poder primordial."
+    SAIDA sul cemiterio_abandonado
+    OBJETO mae_de_ouro "Ela não tem um rosto definido, apenas uma forma luminosa. Sua presença é avassaladora, mas não ameaçadora."
+}
+
+
+// --- INTERAÇÕES E PUZZLES ---
+
+INTERACAO ir qualquer {
+    QUANDO { SALA_ATUAL_EH clareira_das_pegadas ESTADO_SALA_EH amuleto_usado = false }
+    FAZER { FIMDEJOGO "Você tenta escolher um caminho, mas as pegadas te confundem... FIM DE JOGO." }
+}
+
+INTERACAO usar amuleto_de_palha {
+    QUANDO { SALA_ATUAL_EH clareira_das_pegadas TEM_ITEM amuleto_de_palha }
+    FAZER {
+        PRINT "Você segura o amuleto de palha. Por um instante, as pegadas no chão brilham e se alinham, mostrando quatro caminhos distintos..."
+        PERDER_ITEM amuleto_de_palha
+        GANHAR_ITEM cachimbo_de_barro
+        DEFINIR_ESTADO amuleto_usado = true
+        DEFINIR_SAIDAS {
+            SAIDA norte cemiterio_abandonado
+            SAIDA sul cabana_velha
+            SAIDA leste trilha_do_saci
+            SAIDA oeste gruta_da_cuca
+        }
+    }
+}
+
+INTERACAO pegar gorro {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci }
+    FAZER { FIMDEJOGO "No momento em que sua mão toca o gorro, uma música frenética preenche sua mente... FIM DE JOGO." }
+}
+
+INTERACAO ir qualquer {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci ESTADO_SALA_EH barreira_ativa = true }
+    FAZER { PRINT "Você tenta forçar a passagem, mas bate contra uma parede invisível que te repele com uma pequena faísca." }
+}
+
+INTERACAO entregar cachimbo_de_barro {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci TEM_ITEM cachimbo_de_barro }
+    FAZER {
+        PRINT "Você oferece o cachimbo ao ar. Um redemoinho de folhas se forma e um pequeno moleque... 'Heh, fumo do bom!'"
+        PERDER_ITEM cachimbo_de_barro
+        GANHAR_ITEM incenso
+        DEFINIR_ESTADO barreira_ativa = false
+        REMOVER_OBJETO gorro
+        GANHAR_ECO saci
+    }
+}
+
+INTERACAO entregar flor_de_cera {
+    QUANDO { SALA_ATUAL_EH gruta_da_cuca TEM_ITEM flor_de_cera }
+    FAZER {
+        PRINT "Ah, aqui está ela... A Cuca pega a flor. 'Esta flor por esta cera... Uma troca justa.' Ela te entrega um par de bolinhas de cera."
+        PERDER_ITEM flor_de_cera
+        GANHAR_ITEM cera_de_ouvido
+        DEFINIR_ESTADO puzzle_resolvido = true
+    }
+}
+
+INTERACAO usar agua_purificada {
+    QUANDO { SALA_ATUAL_EH arvore_seca TEM_ITEM agua_purificada }
+    FAZER {
+        PRINT "Você derrama a água prateada na base da árvore. Um som sibilante ecoa e o Corpo-Seco se desfaz em cinzas. Um pequeno broto verde surge no galho."
+        PERDER_ITEM agua_purificada
+        DEFINIR_ESTADO purificada = true
+        GANHAR_ECO corpo_seco
+    }
+}
+
+INTERACAO falar iara {
+    QUANDO { SALA_ATUAL_EH lagoa }
+    FAZER {
+        PRINT "A voz dela ecoa em sua mente... 'Sua prudência merece um prêmio...' Você obteve: Agua Purificada."
+        GANHAR_ITEM agua_purificada
+        GANHAR_ECO iara
+        DEFINIR_ESTADO iara_deu_recompensa = true
+    }
+}
+
+INTERACAO apresentar qualquer {
+    QUANDO { SALA_ATUAL_EH mae_de_ouro }
+    FAZER {
+        PRINT "Lógica do final do jogo a ser implementada aqui, baseada na contagem de ecos."
+    }
+}
