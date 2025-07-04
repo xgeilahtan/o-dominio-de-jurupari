@@ -3,7 +3,8 @@
 // ===============================================
 
 // --- ITENS ----
-ITEM amuleto_de_palha "Amuleto de Palha" { DESC "Um amuleto simples, trançado com palha seca. Parece quente ao toque." }
+ITEM amuleto "Amuleto de Palha" { DESC "Um amuleto simples, trançado com palha seca. Parece quente ao toque." } // <--- ALTERAÇÃO 1
+ITEM mapa "Mapa da Floresta" { DESC "Um mapa rústico, desenhado à mão em um pedaço de pergaminho amarelado. Mostra a floresta e seus arredores." }
 ITEM cachimbo_de_barro "Cachimbo de Barro" { DESC "Um cachimbo de barro pequeno e liso, surpreendentemente leve. Ainda está um pouco quente." }
 ITEM incenso "Incenso de Ervas" { DESC "Um bastão de incenso de ervas aromáticas. A fumaça que ele soltaria parece ter propriedades calmantes e protetoras." }
 ITEM flor_de_cera "Flor de Cera" { DESC "Uma flor branca e delicada, com pétalas que parecem ser feitas de cera. Ela exala uma beleza fria e perpétua." }
@@ -11,37 +12,68 @@ ITEM cera_de_ouvido "Cera de Ouvido" { DESC "Duas bolinhas de cera escura e pega
 ITEM agua_purificada "Água Purificada" { DESC "Uma esfera de água que flutua na palma da sua mão, brilhando com uma luz prateada. É fria ao toque e parece pulsar com uma energia melancólica." }
 
 // --- ECOS ---
+// --- ECOS ---
+ECO curupira "O Eco do Guardião" { DESC "Um sussurro de gratidão do espírito da floresta ecoa em sua mente. A imagem de um mapa de exploração, com linhas retas e impiedosas desenhadas sobre a mata virgem, pisca em sua memória. O remorso por essa arrogância agora é parte de você." }
 ECO saci "O Eco do Saci" { DESC "A risada de um moleque travesso ecoa em sua mente, mas logo é sobreposta pelo som de um machado batendo em uma gameleira centenária. A lembrança não é sua, mas o remorso é." }
 ECO iara "O Eco da Iara" { DESC "Uma canção triste flui em seus pensamentos, a imagem de uma lágrima solitária caindo em águas puras. Em seguida, a visão de um rio poluído por óleo e cinzas de queimada. Você sente o peso da tristeza dela como se fosse sua." }
 ECO corpo_seco "O Eco do Corpo-Seco" { DESC "O grito silencioso de agonia se mistura com o estalar de galhos secos sob suas botas. A memória de uma floresta vibrante sendo transformada em um deserto de tocos ecoa, e o ódio amargo do espírito por um instante foi o seu." }
-
+ECO mula "O Eco da Mula" { DESC "O som de cascos em chamas e o cheiro de enxofre ainda queimam em sua memória. Você enfrentou o pavor de frente e sobreviveu. Uma onda de coragem, e não de medo, agora faz parte de você." }
 // --- SALAS ---
-ROOM cabana_velha "Cabana Velha" {
-    DESC "É uma cabana pequena e abafada. O ar tem cheiro de mofo e folhas molhadas. Há uma mesa no centro, uma janela e uma porta ao norte."
-    SAIDA norte clareira_das_pegadas
-    OBJETO janela "Você se aproxima da janela, mas a escuridão lá fora é total, como se a noite fosse uma parede sólida. Você se sente observado."
-    OBJETO porta "A porta de madeira está fechada, mas não parece trancada. Ela emite um rangido baixo e constante. O caminho para o norte passa por ela."
-    OBJETO vela "A vela está derretida sobre um prato de metal e sua luz é a única coisa que te separa da escuridão total. Melhor deixá-la aí."
-    OBJETO mesa "A mesa de madeira está coberta de poeira. Em cima dela, ao lado da vela, você vê um amuleto de palha trançada." { REVELA amuleto_de_palha }
+
+// SALA INTRODUTÓRIA
+ROOM tela_de_inicio "Um Limbo de Memórias" {
+    DESC "Você flutua em um vazio silencioso, um espaço entre o que foi e o que será. Fragmentos de pensamentos ecoam ao seu redor, mas nada faz sentido ainda. 
+Para entender as regras deste domínio, você precisa primeiro se lembrar de como interagir com ele. 
+
+Digite 'help' para ver os comandos disponíveis. 
+Quando estiver pronto, digite 'iniciar' para mergulhar no pesadelo."
 }
 
+ROOM cabana_velha "Cabana Velha" {
+    DESC "Você acorda em uma cabana escura, com o corpo dolorido e a mente vazia. Uma vela solitária em cima de uma mesa ilumina o ambiente com uma luz fraca e trêmula, revelando a madeira podre das paredes.
+Uma janela mostra apenas a escuridão impenetrável da mata lá fora, e a única saída parece ser uma porta de madeira que range ao norte.
+O que você deseja fazer?"
+    
+    SAIDA norte clareira_das_pegadas
+    
+    OBJETO amuleto "Na parede ao lado da porta, pendurado em um prego, você vê um amuleto de palha trançada. Ele parece quente ao toque, emanando uma sensação de calma." { REVELA amuleto } // <--- ALTERAÇÃO 2
+    OBJETO janela "A escuridão do outro lado da janela é total, como se a noite fosse uma parede sólida. Você se sente observado."
+    OBJETO porta "É uma porta de madeira simples, fechada, mas não parece trancada. Ela emite um rangido baixo e constante."
+    OBJETO vela "A vela está quase no fim, sua chama dançando e projetando sombras assustadoras nas paredes. Melhor não tocá-la."
+    OBJETO mesa "Uma mesa de madeira simples e empoeirada. Não há nada nela além da vela moribunda. No entanto, ao olhar por baixo, você vê algo preso entre as tábuas do assoalho." { REVELA mapa }
+}
+
+
 ROOM clareira_das_pegadas "Clareira das Pegadas" {
-    DESC "Você sai da cabana e entra em uma clareira circular. O chão é de terra batida e está coberto de incontáveis pegadas pequenas que parecem não levar a lugar nenhum."
+    DESC "Você entra em uma clareira circular. O chão de terra batida está coberto por dezenas, talvez centenas, de pegadas de pés infantis. 
+Curiosamente, todas as pegadas parecem apontar para trás, como se todos tivessem andado de costas. O som da floresta é estranhamente abafado aqui, e o ar é pesado.
+O que você deseja fazer?"
+    
     OBJETO pegadas "As pegadas são pequenas, de pés com os calcanhares para frente. Elas se cruzam em um padrão caótico e hipnótico."
     OBJETO floresta "A floresta densa cerca a clareira, formando uma parede de árvores silenciosas."
+    OBJETO curupira "Você não vê ninguém, mas sente uma presença antiga e protetora na clareira, um espírito que zela pela mata, mas que parece profundamente irritado com a sua chegada." // <--- NOVO OBJETO
     ESTADO amuleto_usado = false
 }
 
 ROOM trilha_do_saci "Trilha do Saci" {
-    DESC "Você entra em uma trilha estreita e sinuosa. O ar é carregado com o som de risadas travessas. Em um galho próximo, um gorro vermelho se destaca na penumbra."
+    DESC "Você segue o caminho a leste e entra em uma trilha estreita e apertada, onde as árvores parecem se curvar para te observar. Risadas agudas e infantis ecoam de todos os lados, mas você não vê ninguém.
+ No meio da trilha, pendurado em um galho baixo, um gorro vermelho reluz...
+ O que você deseja fazer?"
     SAIDA oeste clareira_das_pegadas
-    OBJETO trilha "A trilha é sinuosa e some na escuridão mais à frente. As risadas parecem vir do gorro vermelho."
-    OBJETO gorro "É um gorro de lã vermelha, com a ponta caída. Parece novo em folha e emana um calor sutil."
+    
+    // Descrições atualizadas
+    OBJETO trilha "A trilha é sinuosa e some na escuridão mais à frente. As risadas travessas parecem vir do gorro vermelho pendurado no galho."
+    OBJETO gorro "É um gorro de lã vermelha, com a ponta caída. Parece novo em folha e emana um calor sutil. Tocar nele parece uma péssima ideia."
+    OBJETO saci "Você não consegue vê-lo, mas sente a presença de um moleque travesso escondido nas sombras, rindo da sua situação." // <--- NOVO OBJETO
     ESTADO barreira_ativa = true
 }
 
 ROOM gruta_da_cuca "Gruta da Cuca" {
-    DESC "A gruta é um laboratório enigmático. Ervas secas pendem do teto, potes de barro com ingredientes bizarros se alinham nas paredes. O foco principal é a Cuca e seu caldeirão borbulhante."
+    DESC "Tomando o caminho a oeste, você encontra a entrada de uma gruta escura. O ar que sai dela é espesso e úmido, carregado com um cheiro agridoce de ervas e algo mais... carne. 
+Lá dentro, a única luz vem de um enorme caldeirão de ferro que borbulha com um líquido violeta. Ao lado dele, uma figura alta e encurvada se vira lentamente para você. 
+É a Cuca. Seus olhos brilham como os de um jacaré, e um sorriso lento revela dentes afiados. Ela não parece hostil, apenas... curiosa.
+E mais ao sul da gruta você se depara com uma Lagoa e com um estranho e encantador canto melancolico, talvez seja melhor ficar longe de lá por hora.
+O que você deseja fazer?"
     SAIDA leste clareira_das_pegadas
     SAIDA sul lagoa
     OBJETO cuca "Ela é mais alta do que parecia, com pele verde e enrugada e cabelos desgrenhados. Ela te observa com uma inteligência antiga e predadora."
@@ -50,47 +82,95 @@ ROOM gruta_da_cuca "Gruta da Cuca" {
 }
 
 ROOM lagoa "Lagoa da Iara" {
-    DESC "Você chega à margem de uma lagoa de águas paradas e escuras. Uma névoa baixa flutua sobre a superfície, e uma melodia triste e hipnótica parece vir do centro da água."
+    DESC "Você segue um caminho úmido que desce da gruta e chega à margem de uma lagoa de águas escuras e paradas. A luz aqui é pálida, quase doentia.
+Flutuando no ar, vinda do centro da lagoa, há uma melodia triste e hipnótica. É a canção mais linda e dolorosa que você já ouviu. Ela te puxa, te chama, prometendo o fim de toda a dor no abraço silencioso da água.
+A canção se intensifica, insistente. Você sente que tem pouquíssimo tempo antes de perder o controle.
+O que você deseja fazer?"
     SAIDA norte gruta_da_cuca
     OBJETO iara "Uma mulher de beleza estonteante e melancólica, com longos cabelos negros que se misturam com a água escura."
     ESTADO iara_deu_recompensa = false
 }
 
 ROOM cemiterio_abandonado "Cemitério Abandonado" {
-    DESC "Cruzes podres e túmulos esquecidos marcam o terreno irregular. Entre eles, uma lápide de mármore solitária chama sua atenção. Você também nota trilhas de cascos queimados na terra."
+    DESC "Você segue o caminho ao sul e a vegetação se torna mais rala. O ar fica gelado e um silêncio pesado... paira sobre o local. 
+Você está em um campo aberto, salpicado de cruzes de madeira tortas e lápides quebradas. O cheiro de terra úmida e decomposição é forte.
+Apesar da desolação, você nota algo incomum: uma única lápide de mármore que se destaca entre as cruzes de madeira."
     SAIDA sul clareira_das_pegadas
     SAIDA leste arvore_seca
     SAIDA norte mae_de_ouro
     OBJETO lapide "A lápide é de uma criança, o nome está ilegível. Aos pés dela, desafiando a podridão, cresce uma única e perfeita flor de cera branca." { REVELA flor_de_cera }
+    OBJETO trilhas "Você nota trilhas de cascos pesados e queimados na terra entre os túmulos, um sinal de perigo recorrente."
 }
 
 ROOM arvore_seca "Árvore Seca" {
-    DESC "Você chega a um lugar de profunda desolação. No centro, uma árvore enorme e seca estende seus galhos retorcidos para o céu. Um frio antinatural emana dela."
-    SAIDA oeste cemiterio_abandonado
-    OBJETO arvore "É um carvalho antigo, sem vida. A casca está rachada e cinzenta. A presença de um espírito rancoroso é tão forte que a própria madeira parece lamentar."
+    DESC "VO caminho termina em uma clareira desolada, onde o ar é tão gelado que você pode ver sua própria respiração. No centro, uma imensa árvore morta se contorce em direção ao céu, seus galhos como dedos esqueléticos. 
+O cheiro de decomposição aqui é insuportável. Agarrado ao tronco da árvore, como se fosse parte dela, está uma figura humana ressequida e retorcida, com a pele esticada sobre os ossos como pergaminho. 
+É um Corpo-Seco. A própria presença dele parece sugar a vida do ambiente e de você. Você se sente fraco, e a sensação piora a cada segundo que permanece aqui.
+O que você deseja fazer?"
+SAIDA oeste cemiterio_abandonado
+    
+    // O objeto que existe ANTES da purificação
+    OBJETO arvore "Agarrado ao tronco da árvore, como se fosse parte dela, está uma figura humana ressequida e retorcida. É um Corpo-Seco. A própria presença dele parece sugar a vida do ambiente."
+    
+    // O objeto que o jogador pode examinar DEPOIS da purificação
+    OBJETO broto "É um único broto verde, pulsando com uma vida que parece desafiar a morte ao redor. Um símbolo de esperança. Você sente que libertou um espírito há muito atormentado."
+    
     ESTADO purificada = false
 }
 
-ROOM mae_de_ouro "Mãe de Ouro" {
-    DESC "A caverna inteira parece viva. Os veios de ouro nas paredes brilham em um ritmo lento, como uma respiração. É um lugar de paz e poder primordial."
-    SAIDA sul cemiterio_abandonado
-    OBJETO mae_de_ouro "Ela não tem um rosto definido, apenas uma forma luminosa. Sua presença é avassaladora, mas não ameaçadora."
-}
 
+ROOM mae_de_ouro "Mina da Mãe de Ouro" {
+    DESC "A caverna inteira parece viva. Os veios de ouro nas paredes brilham em um ritmo lento, como uma respiração. É um lugar de paz e poder primordial, protegido da maldição da floresta."
+    
+    // Saída de volta, caso o jogador precise sair antes de apresentar os ecos
+    SAIDA sul cemiterio_abandonado
+    
+    // Objetos que o jogador pode examinar
+    OBJETO mae_de_ouro "Ela não tem um rosto definido, apenas uma forma luminosa feita de luz dourada. Sua presença é avassaladora, mas não ameaçadora. Você sente que ela vê através de você, cada memória, cada intenção, cada pecado."
+    OBJETO mina "As paredes da caverna brilham com veios de ouro puro que pulsam com uma luz suave. Você sente o peso da terra e a riqueza de eras neste lugar sagrado."
+
+    // Estado inicial que será usado como gatilho para o julgamento
+    ESTADO julgamento_iniciado = false
+}
 
 // --- INTERAÇÕES E PUZZLES ---
 
+// REGRAS DA TELA DE INÍCIO
+INTERACAO iniciar nenhum {
+    QUANDO { SALA_ATUAL_EH tela_de_inicio }
+    FAZER {
+        PRINT "Sua consciência se desvanece e é puxada para baixo..."
+        TELEPORTAR cabana_velha
+    }
+}
+INTERACAO ir qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "Não há para onde ir. O único caminho é para dentro de suas memórias. Digite 'iniciar'." } }
+INTERACAO examinar qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "Não há nada para examinar aqui, apenas o vazio. Digite 'iniciar'." } }
+INTERACAO pegar qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "Suas mãos atravessam o vazio. Não há nada para pegar neste lugar. Digite 'iniciar'." } }
+INTERACAO usar qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "Você não tem nada para usar, e nenhum lugar para usar. Apenas palavras. Digite 'iniciar'." } }
+INTERACAO entregar qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "Não há ninguém aqui para receber nada. A jornada ainda não começou. Digite 'iniciar'." } }
+INTERACAO falar qualquer { QUANDO { SALA_ATUAL_EH tela_de_inicio } FAZER { PRINT "O silêncio é sua única resposta. Você está sozinho com seus pensamentos. Digite 'iniciar'." } }
+
+// PUZZLE DA CLAREIRA
 INTERACAO ir qualquer {
     QUANDO { SALA_ATUAL_EH clareira_das_pegadas ESTADO_SALA_EH amuleto_usado = false }
     FAZER { FIMDEJOGO "Você tenta escolher um caminho, mas as pegadas te confundem... FIM DE JOGO." }
 }
-
-INTERACAO usar amuleto_de_palha {
-    QUANDO { SALA_ATUAL_EH clareira_das_pegadas TEM_ITEM amuleto_de_palha }
+INTERACAO falar curupira {
+    QUANDO { SALA_ATUAL_EH clareira_das_pegadas }
     FAZER {
-        PRINT "Você segura o amuleto de palha. Por um instante, as pegadas no chão brilham e se alinham, mostrando quatro caminhos distintos..."
-        PERDER_ITEM amuleto_de_palha
+        PRINT "Nenhuma voz responde, mas o ar ao seu redor fica mais pesado e frio. As pegadas no chão parecem se mexer sutilmente, zombando da sua desorientação. 
+A floresta inteira te julga em silêncio."
+    }
+}
+INTERACAO usar amuleto {
+    QUANDO { SALA_ATUAL_EH clareira_das_pegadas TEM_ITEM amuleto }
+    FAZER {
+        PRINT "Você segura o amuleto de palha. Por um instante, as pegadas no chão brilham suavemente e parecem se alinhar, mostrando quatro caminhos distintos: um de volta para a cabana (sul), um para uma gruta escura (oeste), outro para uma trilha sinuosa (leste) e um último em direção a um campo aberto e silencioso (norte). 
+Uma voz infantil sussurra em sua mente: 'Obrigado'. O amuleto se desfaz em pó em sua mão, dando lugar a um cachimbo de barro.
+Para onde você quer ir agora?"
+        PERDER_ITEM amuleto
         GANHAR_ITEM cachimbo_de_barro
+        GANHAR_ECO curupira
         DEFINIR_ESTADO amuleto_usado = true
         DEFINIR_SAIDAS {
             SAIDA norte cemiterio_abandonado
@@ -101,20 +181,53 @@ INTERACAO usar amuleto_de_palha {
     }
 }
 
+// --- Bloco de Interações do Saci (Substitua o antigo por este) ---
+
+// Condição de Falha: Tocar no gorro
 INTERACAO pegar gorro {
     QUANDO { SALA_ATUAL_EH trilha_do_saci }
-    FAZER { FIMDEJOGO "No momento em que sua mão toca o gorro, uma música frenética preenche sua mente... FIM DE JOGO." }
+    FAZER { FIMDEJOGO "No momento em que sua mão toca o gorro, uma música frenética e contagiante preenche sua mente. Seus pés começam a se mover sozinhos, dançando descontroladamente. Você dança, pula e gira sem conseguir parar, até a exaustão total tomar seu corpo e sua consciência se apagar. FIM DE JOGO." }
 }
 
-INTERACAO ir qualquer {
+// Bloqueia tentativas de passar pela barreira mágica
+INTERACAO ir norte {
     QUANDO { SALA_ATUAL_EH trilha_do_saci ESTADO_SALA_EH barreira_ativa = true }
-    FAZER { PRINT "Você tenta forçar a passagem, mas bate contra uma parede invisível que te repele com uma pequena faísca." }
+    FAZER { PRINT "Você tenta forçar a passagem para o norte, mas bate contra uma parede invisível que te repele com uma pequena faísca. As risadas aumentam de volume, zombando de seu esforço." }
+}
+INTERACAO ir sul {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci ESTADO_SALA_EH barreira_ativa = true }
+    FAZER { PRINT "Você tenta forçar a passagem para o sul, mas bate contra uma parede invisível que te repele com uma pequena faísca. As risadas aumentam de volume, zombando de seu esforço." }
+}
+INTERACAO ir leste {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci ESTADO_SALA_EH barreira_ativa = true }
+    FAZER { PRINT "Você tenta forçar a passagem para o leste, mas bate contra uma parede invisível que te repele com uma pequena faísca. As risadas aumentam de volume, zombando de seu esforço." }
+}
+// Mensagem para quando o puzzle já foi resolvido mas o jogador tenta ir para o leste
+INTERACAO ir leste {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci ESTADO_SALA_EH barreira_ativa = false }
+    FAZER { PRINT "O caminho à frente continua sinuoso e se perde na mata. Parece não haver uma saída clara por aqui. Sua única opção é voltar para a clareira a oeste." }
 }
 
+
+// Interação de diálogo com o Saci
+INTERACAO falar saci {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci }
+    FAZER { PRINT "As risadas respondem, com uma voz de moleque travesso: 'O que o pistoleiro quer com o Saci? Veio trazer presente?'" }
+}
+
+
+// Dica para o jogador sobre como usar o item
+INTERACAO usar cachimbo_de_barro {
+    QUANDO { SALA_ATUAL_EH trilha_do_saci TEM_ITEM cachimbo_de_barro }
+    FAZER { PRINT "Você apenas segura o cachimbo no ar. Nada acontece. Talvez você precise... oferecê-lo?" }
+}
+
+
+// Solução do Puzzle
 INTERACAO entregar cachimbo_de_barro {
     QUANDO { SALA_ATUAL_EH trilha_do_saci TEM_ITEM cachimbo_de_barro }
     FAZER {
-        PRINT "Você oferece o cachimbo ao ar. Um redemoinho de folhas se forma e um pequeno moleque... 'Heh, fumo do bom!'"
+        PRINT "Você tira o cachimbo do bolso e o oferece ao ar. De repente, um redemoinho de folhas se forma e um pequeno moleque negro, de uma perna só e com um sorriso largo, aparece na sua frente. Ele arranca o cachimbo da sua mão e o analisa. 'Heh, fumo do bom! O homem é de palavra.' Ele joga um incenso aos seus pés, pega o gorro do galho e some no mesmo redemoinho. A barreira mágica e as risadas desapareceram."
         PERDER_ITEM cachimbo_de_barro
         GANHAR_ITEM incenso
         DEFINIR_ESTADO barreira_ativa = false
@@ -123,6 +236,7 @@ INTERACAO entregar cachimbo_de_barro {
     }
 }
 
+// PUZZLE DA CUCA
 INTERACAO entregar flor_de_cera {
     QUANDO { SALA_ATUAL_EH gruta_da_cuca TEM_ITEM flor_de_cera }
     FAZER {
@@ -132,30 +246,134 @@ INTERACAO entregar flor_de_cera {
         DEFINIR_ESTADO puzzle_resolvido = true
     }
 }
-
-INTERACAO usar agua_purificada {
-    QUANDO { SALA_ATUAL_EH arvore_seca TEM_ITEM agua_purificada }
+INTERACAO falar cuca {
+    QUANDO { SALA_ATUAL_EH gruta_da_cuca ESTADO_SALA_EH puzzle_resolvido = false }
     FAZER {
-        PRINT "Você derrama a água prateada na base da árvore. Um som sibilante ecoa e o Corpo-Seco se desfaz em cinzas. Um pequeno broto verde surge no galho."
-        PERDER_ITEM agua_purificada
-        DEFINIR_ESTADO purificada = true
-        GANHAR_ECO corpo_seco
+        PRINT "A Cuca sibila, a voz rouca como o raspar de folhas secas. 'Ora, ora... um espírito recém-colhido, ainda cheirando a vida que deixou para trás. 
+Mas há outro aroma em você... cheiro de seiva derramada e ferro frio. Uma combinação... potente.' 
+Ela olha para a passagem escura ao sul, de onde vem um eco de melodia. 'Percebo seu interesse em prosseguir.' 
+'A canção da chorona no lago é um veneno para a mente. Mas tudo tem um preço...' Ela solta uma risada grave. 
+'Para calar uma canção que enlouquece, preciso da beleza que não murcha. 
+Traga-me a flor que parece de cera encontrada em um lugar de morte, onde a única vida é representada pela sua beleza, se me trouxer essa flor eu te darei o silêncio em troca.'"
     }
 }
 
-INTERACAO falar iara {
+// Interação para falar com a Cuca DEPOIS de resolver o puzzle
+INTERACAO falar cuca {
+    QUANDO { SALA_ATUAL_EH gruta_da_cuca ESTADO_SALA_EH puzzle_resolvido = true }
+    FAZER {
+        PRINT "'Já fiz minha parte do acordo', sibila a Cuca, voltando a se concentrar em seu caldeirão. 'Não me amole mais.'"
+    }
+}
+
+// PUZZLE DA IARA
+// Interação para examinar a Iara depois de estar seguro
+INTERACAO examinar iara {
     QUANDO { SALA_ATUAL_EH lagoa }
     FAZER {
-        PRINT "A voz dela ecoa em sua mente... 'Sua prudência merece um prêmio...' Você obteve: Agua Purificada."
+        PRINT "Com a canção neutralizada, você pode se aproximar da margem. A figura que te encara é a de uma mulher de beleza estonteante e melancólica, com longos cabelos negros que se misturam com a água escura. Ela te observa, não com raiva, mas com uma surpresa fria e antiga."
+    }
+}
+
+// Interação principal para falar com a Iara e receber a recompensa
+INTERACAO falar iara {
+    QUANDO { SALA_ATUAL_EH lagoa ESTADO_SALA_EH iara_deu_recompensa = false }
+    FAZER {
+        PRINT "A voz dela ecoa em sua mente, soando como água fluindo sobre pedras lisas. 'Ora... um mortal que trouxe o próprio silêncio para me visitar. Você é mais prudente do que a maioria. Eles ouvem minha canção e desejam apenas o fim.'\n\nEla inclina a cabeça, um sorriso que não alcança os olhos se formando em seus lábios. 'Vejo que aprendeu a tapar os ouvidos para as vozes da mata quando não lhe convêm. É um talento útil para a sua espécie, não é?'\n\n'Sua prudência merece um prêmio... ou talvez um fardo maior.' Com um gesto, ela ergue uma mão da água. Nela, flutua uma esfera de líquido que brilha com uma luz prateada. 'Leve isto. Há uma sede nesta floresta que só a lágrima de uma alma triste pode curar. Talvez você, que causou tanta tristeza, possa agora remediar um pouco dela.'\n\nVocê obteve: agua_purificada."
         GANHAR_ITEM agua_purificada
         GANHAR_ECO iara
         DEFINIR_ESTADO iara_deu_recompensa = true
     }
 }
 
+// Interação para caso o jogador tente falar com ela novamente
+INTERACAO falar iara {
+    QUANDO { SALA_ATUAL_EH lagoa ESTADO_SALA_EH iara_deu_recompensa = true }
+    FAZER {
+        PRINT "A Iara te ignora, perdida novamente em sua canção silenciosa, que agora só você não pode ouvir."
+    }
+}
+
+/// Interação principal para purificar a árvore
+INTERACAO usar agua_purificada {
+    QUANDO { 
+        SALA_ATUAL_EH arvore_seca 
+        TEM_ITEM agua_purificada 
+        ESTADO_SALA_EH purificada = false 
+    }
+    FAZER {
+        PRINT "Você derrama a água prateada na base da árvore morta. No momento em que a água toca as raízes, um som sibilante, como água em brasa, ecoa. 
+O Corpo-Seco na árvore solta um grito silencioso e agonizante e começa a se desfazer, virando pó e cinzas que são levados pelo vento. 
+A árvore morta estremece, e um pequeno broto verde, vibrante de vida, surge de um de seus galhos secos. O ar fica mais leve, o frio recua, e a sensação de morte desaparece."
+        
+        PERDER_ITEM agua_purificada
+        DEFINIR_ESTADO purificada = true
+        GANHAR_ECO corpo_seco
+        REMOVER_OBJETO arvore // Remove o objeto 'arvore' (com o Corpo-Seco) da sala
+        
+        // Substitui as saídas antigas pelas novas, incluindo o caminho para a mina
+        DEFINIR_SAIDAS {
+            SAIDA oeste cemiterio_abandonado
+            SAIDA norte mae_de_ouro
+        }
+    }
+}
+
+// Interação para caso o jogador tente usar a água novamente
+INTERACAO usar agua_purificada {
+    QUANDO { 
+        SALA_ATUAL_EH arvore_seca 
+        ESTADO_SALA_EH purificada = true 
+    }
+    FAZER {
+        PRINT "A árvore já foi purificada. O pequeno broto é prova do seu ato."
+    }
+}
+
+// Interação para o novo caminho ao norte que só funciona após a purificação
+INTERACAO ir norte {
+    QUANDO { 
+        SALA_ATUAL_EH arvore_seca 
+        ESTADO_SALA_EH purificada = true 
+    }
+    FAZER {
+        PRINT "Com a maldição dissipada, você percebe um caminho ao norte que antes estava escondido pelas sombras e pelo medo. O ar que vem de lá é quente e acolhedor."
+        TELEPORTAR mae_de_ouro
+    }
+}
+
+
+/// --- INTERAÇÕES DA MÃE DE OURO (FINAL DO JOGO) ---
+
+// Resposta para quando o jogador tenta falar
+INTERACAO falar mae_de_ouro {
+    QUANDO { SALA_ATUAL_EH mae_de_ouro }
+    FAZER {
+        PRINT "A voz dela preenche sua mente: 'Chega perto, casca vazia. Você vagueou pelo meu domínio, um fantasma do erro que cometeu. O que você tem a me oferecer?'"
+    }
+}
+
+// Interação específica para 'usar ecos' (VEM PRIMEIRO)
+INTERACAO usar ecos {
+    QUANDO { SALA_ATUAL_EH mae_de_ouro }
+    FAZER {
+        // Ativa o gatilho que o jogo.py irá detectar para iniciar o julgamento
+        DEFINIR_ESTADO julgamento_iniciado = true
+    }
+}
+
+// Interação genérica para 'usar qualquer outra coisa' (VEM DEPOIS)
+INTERACAO usar qualquer {
+    QUANDO { SALA_ATUAL_EH mae_de_ouro }
+    FAZER {
+        PRINT "A voz dela ecoa, impassível: 'Bugigangas não têm valor aqui. Apenas atos. Mostre-me o que você fez para consertar o que quebrou.'"
+    }
+}
+
+// O gatilho para o julgamento (ainda funciona com 'apresentar')
 INTERACAO apresentar qualquer {
     QUANDO { SALA_ATUAL_EH mae_de_ouro }
     FAZER {
-        PRINT "Lógica do final do jogo a ser implementada aqui, baseada na contagem de ecos."
+        DEFINIR_ESTADO julgamento_iniciado = true
     }
 }
