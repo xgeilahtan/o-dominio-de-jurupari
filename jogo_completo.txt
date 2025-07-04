@@ -103,7 +103,7 @@ Apesar da desolação, você nota algo incomum: uma única lápide de mármore q
 }
 
 ROOM arvore_seca "Árvore Seca" {
-    DESC "VO caminho termina em uma clareira desolada, onde o ar é tão gelado que você pode ver sua própria respiração. No centro, uma imensa árvore morta se contorce em direção ao céu, seus galhos como dedos esqueléticos. 
+    DESC "O caminho termina em uma clareira desolada, onde o ar é tão gelado que você pode ver sua própria respiração. No centro, uma imensa árvore morta se contorce em direção ao céu, seus galhos como dedos esqueléticos. 
 O cheiro de decomposição aqui é insuportável. Agarrado ao tronco da árvore, como se fosse parte dela, está uma figura humana ressequida e retorcida, com a pele esticada sobre os ossos como pergaminho. 
 É um Corpo-Seco. A própria presença dele parece sugar a vida do ambiente e de você. Você se sente fraco, e a sensação piora a cada segundo que permanece aqui.
 O que você deseja fazer?"
