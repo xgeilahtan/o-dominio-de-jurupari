@@ -1,4 +1,3 @@
-# lexer.py
 import ply.lex as lex
 
 keywords = {
